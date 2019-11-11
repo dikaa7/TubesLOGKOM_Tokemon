@@ -1,0 +1,189 @@
+Nama/Nim
+1. Ade Surya Handika/13518007
+2. Vincent Tanjaya/13518133
+3. Made Prisha/13518049
+4. Fakhrurrida Widodo/13518091
+
+*****(ALUR CERITA)*****
+- Pemain berada di map 1,1 saat awal permainan
+- Pemain hanya membawa 1 Tokemon Normal dan Tak terhingga Tokeball
+- Pemain dapat mengeksplorasi map berukuran 20x20
+- Didalam map, pemain dapat menemui tokemon baik legendary atau normal secara acak dan dapat melawannya
+dengan tokemon yang sudah ia miliki
+- Selain itu didalam map terdapat Gym Center yang bisa menyembuhkan tokemon pemain
+apabila pemain berada di gym. Pemain hanya dapat menyembuhkan tokemon 1x.
+- Pemain dinyatakan kalah apabila semua tokemon dalam inventory mati.
+- Pemain dinyatakan menang apabila semua legendary tokemon berhasil ditangkap atau dibunuh.
+
+*****(INTRO)*****
+ ██████╗  ██████╗ ████████╗████████╗ █████╗                                                    
+██╔════╝ ██╔═══██╗╚══██╔══╝╚══██╔══╝██╔══██╗                                                   
+██║  ███╗██║   ██║   ██║      ██║   ███████║                                                   
+██║   ██║██║   ██║   ██║      ██║   ██╔══██║                                                   
+╚██████╔╝╚██████╔╝   ██║      ██║   ██║  ██║                                                   
+ ╚═════╝  ╚═════╝    ╚═╝      ╚═╝   ╚═╝  ╚═╝                                                   
+                                                                                               
+ ██████╗ █████╗ ████████╗ ██████╗██╗  ██╗    ███████╗███╗   ███╗     █████╗ ██╗     ██╗     ██╗
+██╔════╝██╔══██╗╚══██╔══╝██╔════╝██║  ██║    ██╔════╝████╗ ████║    ██╔══██╗██║     ██║     ██║
+██║     ███████║   ██║   ██║     ███████║    █████╗  ██╔████╔██║    ███████║██║     ██║     ██║
+██║     ██╔══██║   ██║   ██║     ██╔══██║    ██╔══╝  ██║╚██╔╝██║    ██╔══██║██║     ██║     ╚═╝
+╚██████╗██║  ██║   ██║   ╚██████╗██║  ██║    ███████╗██║ ╚═╝ ██║    ██║  ██║███████╗███████╗██╗
+ ╚═════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝
+Gotta catch 'em all!
+
+Hi there! Welcome to the world of Tokemon! My name is Tome! 
+There are a lot of tokemon all around you! Catch them to get stronger! 
+But your final mission is to defeat or capture all those legendary tokemon, if you fail, 
+you will be out from this world.
+
+Available commands:
+	start. --start the game!
+	help. --show available commands
+	quit. --quit the game
+	n. s. e. w. --move
+	map. --look at the map 
+	heal --cure Tokemon in inventory if in gym center
+	status. --show your status
+	save(Filename). --save your game
+	load(Filename). --load previously saved game
+Legends : 
+	- X = Pagar
+	- P = Player
+	- G = Gym
+
+*****(MAPPING)*****
+- Ukuran "Kotor" = 22 x 22.
+- Map diberikan "bingkai" pagar yang disimbolkan dengan X.
+- Sehingga ukuran bersih map menjadi 20 x 20.
+- Map diberikan gym center yang disimbolkan dengan G.
+- Jumlah Gym : 2
+
+- *** MAP TOKEMON ***
+
+y\x 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22
+1   X X	X X X X X X X  X  X  X  X  X  X  X  X  X  X  X  X  X
+2   X	                                                   X
+3   X	                                                   X
+4   X	    G                                              X
+5   X	                                                   X
+6   X	                                                   X
+7   X	                                                   X
+8   X	                                                   X
+9   X	                                                   X
+10  X	                                                   X
+11  X	                                                   X
+12  X	                           G                       X
+13  X	                                                   X
+14  X	                                                   X
+15  X	                                                   X
+16  X	                                                   X
+17  X	                                                   X
+18  X	                                                   X
+19  X	                                                   X
+20  X	                                                   X
+21  X	                                                   X
+22  X X	X X X X X X X  X  X  X  X  X  X  X  X  X  X  X  X  X
+
+
+*****(TOKEMON)*****
+Jumlah tokemon : 
+- normal : 10
+- legend : 2
+
+health : 
+normal : 50-80
+legend : 100-150
+
+tipe: fire, water, grass, rock
+
+Normal Attack : 
+- normal = 10-20
+- legend = 20-40
+
+Special Attack:
+- normal = 20-30
+- legend = 40-60
+
+*****(LIST TOKEMON)******
+(Fire Type).
+1. Dragonite (Legend)
+Health = 101
+Normal Attack = 38
+Special Attack = 59
+
+2. Firara (Normal)
+Health = 62
+Normal Attack = 17
+Special Attack = 25
+
+3. Burster
+Health = 73
+Normal Attack = 13
+Special Attack = 23
+
+(Rock Type)
+1. ENAX (Normal)
+Health			: 55
+Normal Attack	: 12
+Special Attack	: 25
+
+2. ALON (Normal)
+Health			: 55
+Normal Attack	: 15
+Special Attack	: 22
+
+3. SEGIROCK (Legendary)
+Health			: 120
+Normal Attack	: 35
+Special Attack	: 55
+
+(Grass Type)
+1. Bulbaur (Normal)
+Health = 65
+Tipe = Grass
+Normal attack = 17
+Special attack = 25
+
+2. Oddi (Normal)
+Health = 56
+Tipe = Grass
+Normal attack = 19
+Special attack = 26
+
+3. Exegg (Normal)
+Health = 78
+Tipe = Grass
+Normal attack = 12
+Special attack = 30
+
+(Water Type)
+1. Rain
+Tipe : water
+Health : 80
+Normal attack : 10
+Special attack : 20
+
+2. Octomon
+Tipe : water
+Health : 65
+Normal attack : 15
+Special attack : 25
+
+3. Dragostorm
+Tipe : water
+Health : 50
+Normal attack : 20
+Special attack : 30
+
+
+*****(EXPLORATION MECHANICSM)******
+- Pemain bergerak dengan control : N,S,E,W (sesuai arah mata angin)
+- Pemain dapat bertemu tokemon dengan probabilitas tertentu.
+
+*****(BATTLE MECHANICSM)******
+- Saat pemain bertemu tokemon, ia dapat memilih untuk fight atau run, tetapi ada peluang untuk run
+- Apabila pemain melakukan fight, pemain dapat menyerang dengan normalAttack dan Special Attack (1x).
+- Ada critical damage ketika tokemon dengan tipe tertentu menyerang tokemon dengan tipe tertentu lain.
+- Saat tokemon musuh kalah, pemain dapat memilih untuk menangkap tokemon atau tidak.
+- Saat tokemon pemain kalah, tokemon dihapus dari inventory.
+
