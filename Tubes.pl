@@ -99,14 +99,28 @@ help:-		writeln('Available commands:'),
 			writeln('- X = Pagar'),
 			writeln('- P = Player'),
 			writeln('- G = Gym').
-init-game:- asserta(player_pos(1,1)),
+			
+/* Variabel Dinamik */
+:- dynamic(player_location/2).
+:- dynamic(player_tokemon/1).
+:- dynamic(tokemon_health/2).
+:- dynamic(legend_count/2).
+
+/* Fact Dinamik */
+dynamic_facts :-
+retractall(player_location(_X,_Y)),
+retractall(player_tokemon(_X)),
+retractall(tokemon_health(_X,_Y)),
+retractall(legend_count(_X)),
+
+init-game:- asserta(player_location(1,1)),
 			asserta(gym_pos1(5,4)),
 			asserta(gym_pos1(14,12)),
 			random(1,12,X),
 			id(Y,X),
 			asserta(list_pokemon(Y,health(Y),normalAttack(Y),specialAttack(Y))).
 			
-start:- writeln(' ██████╗  ██████╗ ████████╗████████╗ █████╗     '),                                               
+start:- 	writeln(' ██████╗  ██████╗ ████████╗████████╗ █████╗     '),                                               
 		writeln(' ██╔════╝ ██╔═══██╗╚══██╔══╝╚══██╔══╝██╔══██╗   '),                                                
 		writeln(' ██║  ███╗██║   ██║   ██║      ██║   ███████║    '),                                               
 		writeln(' ██║   ██║██║   ██║   ██║      ██║   ██╔══██║       '),                                            
