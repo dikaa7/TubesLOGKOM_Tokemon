@@ -104,7 +104,7 @@ init-game:- asserta(player_pos(1,1)),
 			asserta(gym_pos1(14,12)),
 			random(1,12,X),
 			id(Y,X),
-			asserta(pokemon(Y)).
+			asserta(list_pokemon(Y,health(Y),normalAttack(Y),specialAttack(Y))).
 			
 start:- writeln(' ██████╗  ██████╗ ████████╗████████╗ █████╗     '),                                               
 		writeln(' ██╔════╝ ██╔═══██╗╚══██╔══╝╚══██╔══╝██╔══██╗   '),                                                
