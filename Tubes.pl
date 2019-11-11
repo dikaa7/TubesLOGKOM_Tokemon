@@ -34,6 +34,7 @@ init-game:- asserta(player_location(1,1)),
 			random(1,12,X),
 			id(Y,X),
 			asserta(list_pokemon(Y,health(Y),normalAttack(Y),specialAttack(Y))).
+
 			
 start:- 	writeln(' ██████╗  ██████╗ ████████╗████████╗ █████╗     '),                                               
 		writeln(' ██╔════╝ ██╔═══██╗╚══██╔══╝╚══██╔══╝██╔══██╗   '),                                                
