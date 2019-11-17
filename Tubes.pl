@@ -7,17 +7,24 @@ Nama / NIM
 4. Fakhrurrida Clarendia Widodo / 13518091
 */
 
-:- dynamic(playerStatus/2)
+:- dynamic(playerStatus/2).
 
 /* INITIATE ATTRIBUTE OF CHARACTER */
 initNbToke(1).
-initTokeList([rand qw(dragonite firara burster bulbaur oddi exegg enax alon segirock rain octomon dragostorm)])
+
+randomFirstTokemon(RandomToke) :-
+random(1, 12, Nr), id(Toke, Nr),
+RandomToke is Toke.
+
+initTokeList([]).
 
 /* INITIATE CHARACTER STATUS */
 initChar:-
-    initNbToke(Health),
-    initTokeList(TokemonList),
-    asserta(playerStatus(TokemonList, Health)), !.
+    initNbToke(NbToke),
+    initTokeList(TokeList),
+    randomFirstTokemon(Random),
+    append([Random], TokeList, NewTokeList),
+    asserta(playerStatus(NewTokeList, NbToke)), !.
 
 /* START MESSAGE */
 start:- write('   ██████╗  ██████╗ ████████╗████████╗ █████╗     '),nl,                                               
@@ -127,6 +134,14 @@ rarity(octomon,normal).
 rarity(dragostorm,normal).
 map_size(0,21).
 
+/* TOKEMON RARITY FACTS */
+rarity(dragonite,legendary).
+rarity(firara,normal).
+rarity(burster,normal).
+rarity(bulbaur,normal).
+rarity(oddi,normal).
+rarity(exegg,normal).
+
 /* HELP DESK */
 help :-	write('Available commands:'),nl,
 write('   start. --start the game!'),nl,
@@ -162,7 +177,8 @@ init_game:- asserta(player_location(1,1)),
 			/*
 			random(1,12,X),
 			id(Y,X),
-			asserta(list_pokemon(Y,health(Y),normalAttack(Y),specialAttack(Y))).
+			asserta(list_pokemon(Y,health(Y),normalAttack(Y),specialAttack(Y))),
+			initChar.
 			*/
 		
 map:- printmap(0,0),!.
@@ -241,7 +257,7 @@ w :-
 /* CEK DI GYM */
 dalamGym :-
 (player_location(X,Y), gym_pos1(Xa, Ya), X==Xa, X==Ya,!);
-(player_location(X,Y), gym_pos2(Xb, Yb), X==Xb, X==Yb,!)
+(player_location(X,Y), gym_pos2(Xb, Yb), X==Xb, X==Yb,!).
 
 /* MELAKUKAN RETREAT PADA TOKEMON */
 retreat(Tokemon) :-
