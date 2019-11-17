@@ -144,7 +144,7 @@ retractall(player_tokemon(_X)),
 retractall(tokemon_health(_X,_Y)),
 retractall(legend_count(_X)).
 
-:- dynamic(playerStatus/2).
+:- dynamic(playerStatus/3).
 
 /* INITIATE ATTRIBUTE OF CHARACTER */
 initNbToke(1).
@@ -160,8 +160,9 @@ initChar:-
     initNbToke(NbToke),
     initTokeList(TokeList),
     randomFirstTokemon(Random),
+    CurrentTokemon is Random,
     append([Random], TokeList, NewTokeList),
-    asserta(playerStatus(NewTokeList, NbToke)), !.
+    asserta(playerStatus(NewTokeList, NbToke, CurrentTokemon)), !.
 
 /* INITIATE GAME */
 init_game:- asserta(player_location(1,1)),
