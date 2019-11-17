@@ -282,3 +282,89 @@ delete_one(_, [], []).
 delete_one(Term, [Term|Tail], Tail) :- !.
 delete_one(Term, [Head|Tail], [Head|Result]) :-
     delete_one(Term, Tail, Result).
+
+/* SAVE */
+
+save_game :-
+nl, write ('Name of your file : '),
+nl, read(File),
+atom_concat(File, '.txt', Filetext),
+open(Filetext, write, Stream),
+save_all(Stream),
+close(Stream),
+write('Saved !'), nl.
+
+save_all(Stream) :-
+save_playerStatus(Stream).
+
+save_all(Stream) :-
+save_player_location(Stream).
+
+save_all(Stream) :-
+save_player_tokemon(Stream).
+
+save_all(Stream) :-
+save_tokemon_health(Stream).
+
+save_all(Stream) :-
+save_legend_count(Stream).
+
+save_playerStatus(Stream) :-
+playerStatus(TokemonList,NbTokemon),
+write(Stream, playerStatus(TokemonList,NbTokemon)),
+write(Stream, '.'),
+nl(Stream),
+fail.
+
+save_player_location(Stream) :-
+player_location(X,Y),
+write(Stream,player_location(X,Y)),
+write(Stream, '.'),
+nl(Stream),
+fail.
+
+save_player_tokemon(Stream) :-
+player_tokemon(X),
+write(Stream, player_tokemon(X)),
+write(Stream,'.'),
+nl(Stream),
+fail.
+
+save_tokemon_health(Stream) :-
+tokemon_health(X,Y),
+write(Stream, tokemon_health(X,Y)),
+write(Stream, '.'),
+nl(Stream),
+fail.
+
+save_legend_count(Stream) :-
+legend_count(X),
+write(Stream, legend_count(X)),
+write(Stream, '.'),
+nl(Stream),
+fail.
+
+/* LOAD */
+
+load_game :-
+nl, write ('Name of your file : '),
+nl, read(File),
+atom_concat(File, '.txt', Filetext),
+load_all(Filetext).
+
+load_all(Filetext) :-
+retractall(playerStatus(_,_)),
+retractall(player_location(_,_)),
+retractall(player_tokemon(_)),
+retractall(tokemon_health(_,_)),
+retractall(legend_count(_))
+open(Filetext, read, Stream),
+repeat,
+read(Stream, In),
+asserta(In),
+at_end_of_stream(Stream),
+close(Stream,
+nl, write('Loaded !')), nl, !.
+
+load_all(_) :-
+nl, write ('Wrong input !'), nl, fail.
