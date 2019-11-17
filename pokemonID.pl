@@ -1,5 +1,5 @@
 /* ID(T,I) : Tokemon T memiliki identifier code I */
-id(daronite,1).
+id(dragonite,1).
 id(firara,2).
 id(burster,3).
 id(bulbaur,4).
