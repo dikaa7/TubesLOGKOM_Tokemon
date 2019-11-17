@@ -170,7 +170,7 @@ init_game:- asserta(player_location(1,1)),
 			/*
 			random(1,12,X),
 			id(Y,X),
-			asserta(list_pokemon(Y,health(Y),normalAttack(Y),specialAttack(Y))),
+			asserta(tokemon_status(Y,health(Y),normalAttack(Y),specialAttack(Y))),
 			initChar.
 			*/
 		
@@ -269,3 +269,7 @@ retract(playerStatus(TokemonList, NbTokemon)),
 delete_one(CapturedT, TokemonList, NewTokeList),
 NewNbToke is NbTokemon - 1,
 asserta(playerStatus(NewTokeList, NewNbToke)).
+
+/* CALL TOKEMON */
+callTokemon(Called) :-
+playerStatus(Inventory, NbTokemon),
