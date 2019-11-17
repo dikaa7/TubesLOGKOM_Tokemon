@@ -1,11 +1,46 @@
 
 /*
-Nama/Nim
-1. Ade Surya Handika/13518007
-2. Vincent Tanjaya/13518133
-3. Made Prisha/13518049
-4. Fakhrurrida Widodo/13518091
+Nama / NIM
+1. Ade Surya Handika / 13518007
+2. Vincent Tanjaya / 13518133
+3. Made Prisha / 13518049
+4. Fakhrurrida Clarendia Widodo / 13518091
 */
+
+:- dynamic(playerStatus/2)
+
+/* INITIATE ATTRIBUTE OF CHARACTER */
+initNbToke(1).
+initTokeList([rand qw(dragonite firara burster bulbaur oddi exegg enax alon segirock rain octomon dragostorm)])
+
+/* INITIATE CHARACTER STATUS */
+initChar:-
+    initNbToke(Health),
+    initTokeList(TokemonList),
+    asserta(playerStatus(TokemonList, Health)), !.
+
+/* START MESSAGE */
+start:- write('   ██████╗  ██████╗ ████████╗████████╗ █████╗     '),nl,                                               
+		write(' ██╔════╝ ██╔═══██╗╚══██╔══╝╚══██╔══╝██╔══██╗   '),nl,                                                
+		write(' ██║  ███╗██║   ██║   ██║      ██║   ███████║    '),nl,                                               
+		write(' ██║   ██║██║   ██║   ██║      ██║   ██╔══██║       '),nl,                                            
+		write(' ╚██████╔╝╚██████╔╝   ██║      ██║   ██║  ██║          '),nl,                                         
+		write('  ╚═════╝  ╚═════╝    ╚═╝      ╚═╝   ╚═╝  ╚═╝             '),nl,                                      
+																										   
+		write(' ██████╗ █████╗ ████████╗ ██████╗██╗  ██╗    ███████╗███╗   ███╗     █████╗ ██╗     ██╗     ██╗'),nl,
+		write('██╔════╝██╔══██╗╚══██╔══╝██╔════╝██║  ██║    ██╔════╝████╗ ████║    ██╔══██╗██║     ██║     ██║'),nl,
+		write('██║     ███████║   ██║   ██║     ███████║    █████╗  ██╔████╔██║    ███████║██║     ██║     ██║'),nl,
+		write('██║     ██╔══██║   ██║   ██║     ██╔══██║    ██╔══╝  ██║╚██╔╝██║    ██╔══██║██║     ██║     ╚═╝'),nl,
+		write('╚██████╗██║  ██║   ██║   ╚██████╗██║  ██║    ███████╗██║ ╚═╝ ██║    ██║  ██║███████╗███████╗██╗'),nl,
+		write(' ╚═════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝'),nl,
+		write("Gotta catch 'em all!"),
+
+		write('Hi there! Welcome to the world of Tokemon! My name is Tome!                              '),nl,
+		write('There are a lot of tokemon all around you! Catch them to get stronger! '),nl,
+		write('But your final mission is to defeat or capture all those legendary tokemon, if you fail, '),nl,
+		write('you will be out from this world.            '),
+		help,
+		init_game.
 
 /* TOKEMON HEALTH FACTS */
 health(dragonite,101).
@@ -20,6 +55,20 @@ health(segirock, 120).
 health(rain,80).
 health(octomon,65).
 health(dragostorm,50).
+
+/* TOKEMON MAX HEALTH FACTS */
+maxhealth(dragonite,101).
+maxhealth(firara,62).
+maxhealth(burster,73).
+maxhealth(bulbaur,65).
+maxhealth(oddi,56).
+maxhealth(exegg,78).
+maxhealth(enax, 55).
+maxhealth(alon, 55).
+maxhealth(segirock, 120).
+maxhealth(rain,80).
+maxhealth(octomon,65).
+maxhealth(dragostorm,50).
 
 /* TOKEMON TYPE FACTS */
 type(enax, rock).
@@ -78,8 +127,7 @@ rarity(octomon,normal).
 rarity(dragostorm,normal).
 map_size(0,21).
 
-
-
+/* HELP DESK */
 help :-	write('Available commands:'),nl,
 write('   start. --start the game!'),nl,
 write('   help. --show available commands'),nl,
@@ -117,28 +165,8 @@ init_game:- asserta(player_location(1,1)),
 			asserta(list_pokemon(Y,health(Y),normalAttack(Y),specialAttack(Y))).
 			*/
 		
-start:- write('   ██████╗  ██████╗ ████████╗████████╗ █████╗     '),nl,                                               
-		write(' ██╔════╝ ██╔═══██╗╚══██╔══╝╚══██╔══╝██╔══██╗   '),nl,                                                
-		write(' ██║  ███╗██║   ██║   ██║      ██║   ███████║    '),nl,                                               
-		write(' ██║   ██║██║   ██║   ██║      ██║   ██╔══██║       '),nl,                                            
-		write(' ╚██████╔╝╚██████╔╝   ██║      ██║   ██║  ██║          '),nl,                                         
-		write('  ╚═════╝  ╚═════╝    ╚═╝      ╚═╝   ╚═╝  ╚═╝             '),nl,                                      
-																										   
-		write(' ██████╗ █████╗ ████████╗ ██████╗██╗  ██╗    ███████╗███╗   ███╗     █████╗ ██╗     ██╗     ██╗'),nl,
-		write('██╔════╝██╔══██╗╚══██╔══╝██╔════╝██║  ██║    ██╔════╝████╗ ████║    ██╔══██╗██║     ██║     ██║'),nl,
-		write('██║     ███████║   ██║   ██║     ███████║    █████╗  ██╔████╔██║    ███████║██║     ██║     ██║'),nl,
-		write('██║     ██╔══██║   ██║   ██║     ██╔══██║    ██╔══╝  ██║╚██╔╝██║    ██╔══██║██║     ██║     ╚═╝'),nl,
-		write('╚██████╗██║  ██║   ██║   ╚██████╗██║  ██║    ███████╗██║ ╚═╝ ██║    ██║  ██║███████╗███████╗██╗'),nl,
-		write(' ╚═════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝'),nl,
-		write("Gotta catch 'em all!"),
-
-		write('Hi there! Welcome to the world of Tokemon! My name is Tome!                              '),nl,
-		write('There are a lot of tokemon all around you! Catch them to get stronger! '),nl,
-		write('But your final mission is to defeat or capture all those legendary tokemon, if you fail, '),nl,
-		write('you will be out from this world.            '),
-		help,
-		init_game.
 map:- printmap(0,0),!.
+
 printmap(X,Y):- player_location(Xa,Ya),
 				X == Xa, Y == Ya,
 				write('P'),
@@ -188,7 +216,8 @@ printmap(X,Y):- X<22,Y<22,
 				N is Y,!,
 				printmap(M,N),!.
 printmap(X,Y):- X>21,Y>21,!.
-/* Move */
+
+/* MOVE */
 n :-
 (player_location(X,Y), map_size(Min,Max), Z is Y - 1, Z =< Min, write(' Invalid move'), !);
 (player_location(X,Y), map_size(Min,Max), Z is Y - 1, Z > Min, retractall(player_location(X,Y)), assertz(player_location(X,Z)), !).
@@ -208,4 +237,26 @@ w :-
 (player_location(X,Y), map_size(Min,Max), Z is X - 1, Z =< Min, write(' Invalid move'));
 (player_location(X,Y), map_size(Min,Max), Z is X - 1, Z > Min, retractall(player_location(X,Y)), assertz(player_location(Z,Y)),!).
 
-						
+/* ADDED ON 17/11/2019 */
+/* CEK DI GYM */
+dalamGym :-
+(player_location(X,Y), gym_pos1(Xa, Ya), X==Xa, X==Ya,!);
+(player_location(X,Y), gym_pos2(Xb, Yb), X==Xb, X==Yb,!)
+
+/* MELAKUKAN RETREAT PADA TOKEMON */
+retreat(Tokemon) :-
+(health(Tokemon, Current), maxhealth(Tokemon, Max), Current is Max).
+
+/* ADD CAPTURED TOKEMON TO INVENTORY */
+addTokemon(CapturedT) :-
+retract(playerStatus(TokemonList, NbTokemon)),
+append([CapturedT],TokemonList, NewTokeList),
+NewNbToke is NbTokemon + 1,
+asserta(playerStatus(NewTokeList, NewNbToke)).
+
+/* ERASE LOST TOKEMON FROM INVENTORY */
+eraseTokemon(DeadT) :-
+retract(playerStatus(TokemonList, NbTokemon)),
+delete_one(CapturedT, TokemonList, NewTokeList),
+NewNbToke is NbTokemon - 1,
+asserta(playerStatus(NewTokeList, NewNbToke)).
