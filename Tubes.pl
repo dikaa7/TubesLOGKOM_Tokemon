@@ -257,12 +257,12 @@ dalamGym :-
 retreat(Tokemon) :-
 (health(Tokemon, Current), maxhealth(Tokemon, Max), Current is Max).
 
-/* HEALING PROCESS */
+/* HEALING PROCESS
 heal :-
 dalamGym,
 playerStatus(Inventory, NbToke),
 
-retreat
+retreat */
 
 /* ADD CAPTURED TOKEMON TO INVENTORY */
 addTokemon(CapturedT) :-
