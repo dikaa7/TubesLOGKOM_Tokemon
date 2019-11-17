@@ -357,7 +357,7 @@ retractall(playerStatus(_,_)),
 retractall(player_location(_,_)),
 retractall(player_tokemon(_)),
 retractall(tokemon_health(_,_)),
-retractall(legend_count(_))
+retractall(legend_count(_)),
 open(Filetext, read, Stream),
 repeat,
 read(Stream, In),
