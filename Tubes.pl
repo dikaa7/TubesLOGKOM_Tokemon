@@ -256,6 +256,13 @@ dalamGym :-
 retreat(Tokemon) :-
 (health(Tokemon, Current), maxhealth(Tokemon, Max), Current is Max).
 
+/* HEALING PROCESS */
+heal :-
+dalamGym,
+playerStatus(Inventory, NbToke),
+
+retreat
+
 /* ADD CAPTURED TOKEMON TO INVENTORY */
 addTokemon(CapturedT) :-
 retract(playerStatus(TokemonList, NbTokemon)),
@@ -270,6 +277,7 @@ delete_one(CapturedT, TokemonList, NewTokeList),
 NewNbToke is NbTokemon - 1,
 asserta(playerStatus(NewTokeList, NewNbToke)).
 
-/* CALL TOKEMON */
-callTokemon(Called) :-
-playerStatus(Inventory, NbTokemon),
+delete_one(_, [], []).
+delete_one(Term, [Term|Tail], Tail) :- !.
+delete_one(Term, [Head|Tail], [Head|Result]) :-
+    delete_one(Term, Tail, Result).
