@@ -21,7 +21,7 @@ start:- write('   ██████╗  ██████╗ █████�
 		write('██║     ██╔══██║   ██║   ██║     ██╔══██║    ██╔══╝  ██║╚██╔╝██║    ██╔══██║██║     ██║     ╚═╝'),nl,
 		write('╚██████╗██║  ██║   ██║   ╚██████╗██║  ██║    ███████╗██║ ╚═╝ ██║    ██║  ██║███████╗███████╗██╗'),nl,
 		write(' ╚═════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝'),nl,
-		write("Gotta catch 'em all!"),
+		write('Gotta catch `em all!'),
 
 		write('Hi there! Welcome to the world of Tokemon! My name is Tome!                              '),nl,
 		write('There are a lot of tokemon all around you! Catch them to get stronger! '),nl,
@@ -32,18 +32,7 @@ start:- write('   ██████╗  ██████╗ █████�
 		initChar.
 
 /* TOKEMON HEALTH FACTS */
-health(1,101).
-health(2,62).
-health(3,73).
-health(4,65).
-health(5,56).
-health(6,78).
-health(7,55).
-health(8,55).
-health(9,120).
-health(10,80).
-health(11,65).
-health(12,50).
+
 
 /* TOKEMON MAX HEALTH FACTS */
 maxhealth(1,101).
@@ -73,6 +62,19 @@ type(rain,water).
 type(octomon,water).
 type(dragostorm,water).
 
+position(1,20,20).
+position(2,4,5).
+position(3,12,9).
+position(5,18,3).
+position(6,2,14).
+position(7,8,19).
+position(8,7,13).
+position(9,20,1).
+position(10,14,3).
+position(11,3,2).
+position(12,4,1).
+
+
 
 /* TOKEMON NORMAL ATTACK FACTS */
 normalAttack(enax, 12).
@@ -87,6 +89,7 @@ normalAttack(exegg,12).
 normalAttack(rain,10).
 normalAttack(octomon,15).
 normalAttack(dragostorm,20).
+
 
 /* TOKEMON SPECIAL ATTACK FACTS */
 specialAttack(dragonite,59).
@@ -148,6 +151,7 @@ write('- G = Gym'),nl.
 /* Variabel Dinamik */
 :- dynamic(player_location/2).
 :- dynamic(player_tokemon/1).
+:- dynamic(health/2).
 :- dynamic(legend_count/2).
 :- dynamic(playerStatus/2).
 
@@ -158,22 +162,26 @@ retractall(player_tokemon(_X)),
 retractall(tokemon_health(_X,_Y)),
 retractall(legend_count(_X)).
 
+health(1,101).
+health(2,62).
+health(3,73).
+health(4,65).
+health(5,56).
+health(6,78).
+health(7,55).
+health(8,55).
+health(9,120).
+health(10,80).
+health(11,65).
+health(12,50).
 /* INITIATE ATTRIBUTE OF CHARACTER */
 initNbToke(1).
 
 randomFirstTokemon(RandomToke) :-
-<<<<<<< HEAD
 random(1, 12, Nr),
 Nr\=9,
 Nr\=1,
 RandomToke is Nr.
-=======
-random(1, 12, Nr), 
-Nr\==1,
-Nr\==9,
-id(Toke, Nr),
-RandomToke is Toke.
->>>>>>> 2783899be06c50e54ed7b63877628df33f93dc16
 
 initTokeList([]).
 
@@ -181,8 +189,7 @@ initTokeList([]).
 initChar:-
     initNbToke(NbToke),
     initTokeList(TokeList),
-    randomFirstTokemon(Random),
-    append([Random], TokeList, NewTokeList),
+    append([4], TokeList, NewTokeList),
     asserta(playerStatus(NewTokeList, NbToke)), !.
 
 /* INITIATE GAME */
@@ -217,7 +224,7 @@ printmap(X,Y):- gym_pos2(Xa,Ya),
 				N is Y,!,
 				printmap(M,N),!.
 printmap(X,Y):- X == 22, Y<22,
-				write(""),nl,
+				write(''),nl,
 				M is 0,!,
 				N is Y+1,
 				printmap(M,N),!.
@@ -251,23 +258,44 @@ printmap(X,Y):- X>21,Y>21,!.
 /* MOVE */
 n :-
 (player_location(X,Y), map_size(Min,Max), Z is Y - 1, Z =< Min, write(' Invalid move'), !);
-(player_location(X,Y), map_size(Min,Max), Z is Y - 1, Z > Min, retractall(player_location(X,Y)), assertz(player_location(X,Z)), !).
+(player_location(X,Y), map_size(Min,Max), Z is Y - 1, Z > Min, retractall(player_location(X,Y)), assertz(player_location(X,Z)), !),cek(X,Z,1).
 
 /* e : menggerakkan pemain satu petak ke arah timur */
 e :-
 (player_location(X,Y), map_size(Min,Max), Z is X + 1, Z >= Max, write(' Invalid move'), !);
-(player_location(X,Y), map_size(Min,Max), Z is X + 1, Z < Max, retractall(player_location(X,Y)), assertz(player_location(Z,Y)), !).
+(player_location(X,Y), map_size(Min,Max), Z is X + 1, Z < Max, retractall(player_location(X,Y)), assertz(player_location(Z,Y)), !),cek(Z,Y,1).
 
 /* s : menggerakkan pemain satu petak ke arah selatan */
 s :-
 (player_location(X,Y), map_size(Min,Max), Z is Y + 1, Z >= Max, write(' Invalid move'), !);
-(player_location(X,Y), map_size(Min,Max), Z is Y + 1, Z < Max, retractall(player_location(X,Y)), assertz(player_location(X,Z)), !).
+(player_location(X,Y), map_size(Min,Max), Z is Y + 1, Z < Max, retractall(player_location(X,Y)), assertz(player_location(X,Z)), !),cek(X,Z,1).
 
 /* w : menggerakkan pemain satu petak ke arah barat */
 w :-
 (player_location(X,Y), map_size(Min,Max), Z is X - 1, Z =< Min, write(' Invalid move'));
-(player_location(X,Y), map_size(Min,Max), Z is X - 1, Z > Min, retractall(player_location(X,Y)), assertz(player_location(Z,Y)),!).
+(player_location(X,Y), map_size(Min,Max), Z is X - 1, Z > Min, retractall(player_location(X,Y)), assertz(player_location(Z,Y)),!),cek(Z,Y,1).
 
+cek(X,Y,Z):- gym_pos1(Xa,Ya),
+		   X == Xa, Y == Ya,
+		   write('Anda sedang berada di gym, anda dapat menggunakan command heal untuk menyembuhkan tokemon anda'),nl,!.
+cek(X,Y,Z):- gym_pos2(Xa,Ya),
+			X == Xa, Y == Ya,
+			write('Anda sedang berada di gym, anda dapat menggunakan command heal untuk menyembuhkan tokemon anda'),nl,!.
+cek(X,Y,Z):- Z<13,
+			position(Z,Xa,Ya),
+			Xa == X, Y == Y,
+			write('A wild Tokemon appears'),nl,
+			write('Fight or Run?'),nl,!.
+cek(X,Y,Z):- Z<13,
+			position(Z,Xa,Ya),
+			X\=Xa,
+			Za is Z+1,
+			cek(X,Y,Za).
+cek(X,Y,Z):- Z<13,
+			position(Z,Xa,Ya),
+			Y\=Xa,
+			Za is Z+1,
+			cek(X,Y,Za).
 /* ADDED ON 17/11/2019 */
 /* CEK DI GYM */
 dalamGym :-
@@ -276,32 +304,33 @@ dalamGym :-
 
 /* MELAKUKAN RETREAT PADA TOKEMON */
 retreat(Tokemon) :-
-(health(Tokemon, Current), maxhealth(Tokemon, Max), Current is Max).
+(id(TokemonName,Tokemon),tokemon(TokemonName,Health1,Ta,Tb,Tc,Td), maxhealth(Tokemon, Max),retract(tokemon(TokemonName,Health1,Ta,Tb,Tc,Td)),asserta(tokemon(TokemonName,Max,Ta,Tb,Tc,Td)).
 
-/* HEALING PROCESS
-heal :-
-dalamGym,
-playerStatus(Inventory, NbToke),
+heal :- playerStatus(TokemonL,NbToke),
+		heal1(TokemonL,NbToke).
+heal1(TokemonL,NbToke):- NbToke>0,
+						[H|T] = TokemonL,
+						retreat(H),NbToke1 is NbToke-1,
+						heal1(T,NbToke1).
 
-retreat */
 status:- playerStatus(TokemonList1, NbTokemon),
 		write('Your Tokemon:'),nl,
 		printstatus(TokemonList1, NbTokemon),!.
 printstatus(TokemonL,NbTokemon):- NbTokemon == 0,
-								nl,write('Your Enemy : '),nl,
+								nl,write('Your Enemy : '),nl,nl,
 									id(TokemonName,1),
 									write(TokemonName),nl,
-									health(1,Health),
-									write('Health:'),write(Health),nl,
+									tokemon(TokemonName,Health1,_,_,_,_),
+									write('Health:'),write(Health),nl,nl,
 									id(TokemonName1,9),
 									write(TokemonName1),nl,
-									health(9,Health2),
+									tokemon(TokemonName,Health2,_,_,_,_),
 									write('Health:'),write(Health2),nl.
 printstatus(TokemonL,NbTokemon):- NbTokemon > 0,
 								[Head|T] = TokemonL,
 								 id(TokemonName,Head),
 								 write(TokemonName),nl,
-								 health(Head,Health1),
+								 tokemon(TokemonName,Health1,_,_,_,_),
 								 write('Health :'),write(Health1),nl,
 								 NbToke is NbTokemon-1,
 								 printstatus(T,NbToke).
@@ -330,11 +359,7 @@ delete_one(Term, [Head|Tail], [Head|Result]) :-
 /* SAVE */
 
 save_game :-
-<<<<<<< HEAD
- write('Name of your file : '),
-=======
 nl, write('Name of your file : '),
->>>>>>> 2783899be06c50e54ed7b63877628df33f93dc16
 nl, read(File),
 atom_concat(File, '.txt', Filetext),
 open(Filetext, write, Stream),
@@ -395,11 +420,7 @@ fail.
 /* LOAD */
 
 load_game :-
-<<<<<<< HEAD
- write('Name of your file : '),
-=======
 nl, write('Name of your file : '),
->>>>>>> 2783899be06c50e54ed7b63877628df33f93dc16
 nl, read(File),
 atom_concat(File, '.txt', Filetext),
 load_all(Filetext).
@@ -419,9 +440,6 @@ close(Stream,
 nl, write('Loaded !')), nl, !.
 
 load_all(_) :-
-<<<<<<< HEAD
- write('Wrong input !'), nl, fail.
-=======
 nl, write('Wrong input !'), nl, fail.
 
 /* NYEBAR POKEMON */
@@ -445,4 +463,3 @@ spread_tokemon(B) :-
  init_game:- asserta(player_location(1,1)),
 			asserta(gym_pos1(5,4)),
 			asserta(gym_pos2(14,12)).
->>>>>>> 2783899be06c50e54ed7b63877628df33f93dc16
