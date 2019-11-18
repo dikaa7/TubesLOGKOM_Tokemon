@@ -287,7 +287,7 @@ delete_one(Term, [Head|Tail], [Head|Result]) :-
 /* SAVE */
 
 save_game :-
-nl, write ('Name of your file : '),
+nl, write('Name of your file : '),
 nl, read(File),
 atom_concat(File, '.txt', Filetext),
 open(Filetext, write, Stream),
@@ -348,7 +348,7 @@ fail.
 /* LOAD */
 
 load_game :-
-nl, write ('Name of your file : '),
+nl, write('Name of your file : '),
 nl, read(File),
 atom_concat(File, '.txt', Filetext),
 load_all(Filetext).
@@ -368,4 +368,26 @@ close(Stream,
 nl, write('Loaded !')), nl, !.
 
 load_all(_) :-
-nl, write ('Wrong input !'), nl, fail.
+nl, write('Wrong input !'), nl, fail.
+
+/* NYEBAR POKEMON */
+spreadTokemon :-
+    repeat,
+    random(1, 12, A), id(Z, A),
+    random(0, 19, X), random(0, 19, Y),
+    gym_pos1(Xa,Ya), gym_pos2(Xb, Yb),
+    X\==Xa,
+    X\==Xb,
+    Y\==Ya,
+    Y\==Yb,
+    asserta(tokemon_pos(X,Y,Z)),!.
+
+init_weapon(0) :-!.
+init_weapon(N) :-
+    randomWeapon,
+    M is N-1,
+    init_weapon(M).
+
+ init_game:- asserta(player_location(1,1)),
+			asserta(gym_pos1(5,4)),
+			asserta(gym_pos2(14,12)).
