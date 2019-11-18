@@ -714,3 +714,10 @@ change(A) :-
         write('Kembalilah '), write(X), nl,
         retract(chosentokemon(X,_)), asserta(chosentokemon(A,1)),
         write('Keluarlah, '), write(A), nl, !.
+
+/* QUIT. COMMAND */
+quit :- 
+		nl,
+		write('Terima kasih sudah bermain Tokemon!'),nl,nl,nl,nl,
+		write('Jika Pokemon adalah POCKET MONSTER, maka Tokemon adalah...'),nl,
+		halt.
