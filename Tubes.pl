@@ -351,17 +351,17 @@ write(A), write('.'), nl,
 write(X), write('.'), nl,
 write(Y), write('.'), nl,
 write(B), write('.'), nl,
-forall((player_tokemon(BB), BB\ == B, BB \== none), (write(BB), write('.'), nl)),
+forall((player_tokemon(BB), BB\=B, BB\=none), (write(BB), write('.'), nl)),
 write('done.'), nl,
 write(C), write('.'), nl,
 write(D), write('.'), nl,
-forall((tokemon_health(CC,DD), CC\ == C, CC \== none), (write(BB), write('.'), nl), (write(DD), write('.'), nl)),
+forall((tokemon_health(CC,DD), CC\=C, CC\=none), (write(BB), write('.'), nl), (write(DD), write('.'), nl)),
 write('done.'), nl,
 write(E), write('.'), told, !.
 
 save_player_tokemon :-
-\+ player_tokemon(_,_),
-asserta(player_tokemon(none,0).
+\+ player_tokemon(_),
+asserta(player_tokemon(none)).
 
 save_player_tokemon.
 /*
