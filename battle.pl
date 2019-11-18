@@ -8,7 +8,7 @@
 choose(_) :- losing, lose, !.
 choose(X) :- 
         inbattle(1),
-        tokemon(X,_,_,_,_,_,_), asserta(chosentokemonmon(X,1)),
+        tokemon(X,_,_,_,_,_,_), asserta(chosentokemon(X,1)),
         %battle stage ke 1 yaitu saat bertarung(attack dan attacked) 
         write('You : Saya memilih kamu,"'),write(X),write('"'),nl,nl, life, !.
 
@@ -20,7 +20,7 @@ choose(X) :-
 %         write('Kamu tidak memiliki pokemon tersebut!, Harap memilih ulang!'), nl, !.
 choose(_) :- 
         inbattle(1), 
-        chosentokemonmon(X,_),
+        chosentokemon(X,_),
         write('Kamu tidak bisa memilih ulang saat bertarung, harap gunakan "change(X)."'),!.
 choose(_) :- 
         \+ inbattle(1), 
@@ -36,21 +36,21 @@ attack :-
         write('Kamu tidak sedang bertarung'),nl,!.
 attack :- 
         inbattle(1), 
-        chosentokemonmon(X,_), tokemon(X,_,Att,_,TypeM,_,_), enemy(A,HP,B,C,TypeL,E),
+        chosentokemon(X,_), tokemon(X,_,Att,_,TypeM,_,_), enemy(A,HP,B,C,TypeL,E),
         strong(TypeM, TypeL), D is div(Att * 3, 2), Z is HP - D,
         write('Serangannya sangat efektif!'), nl,
         write('Kamu menyebabkan '), write(D), write(' damage pada '), write(A),nl,nl,   
         retract(enemy(_,_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL,E)), cekhealthL, !.
 attack :- 
         inbattle(1),
-        chosentokemonmon(X,_), tokemon(X,_,Att,_,TypeM,_,_), enemy(A,HP,B,C,TypeL,E),
+        chosentokemon(X,_), tokemon(X,_,Att,_,TypeM,_,_), enemy(A,HP,B,C,TypeL,E),
         strong(TypeL, TypeM), D is div(Att, 2), Z is HP - D, 
         write('Serangannya tidak efektif!'), nl, 
         write('Kamu menyebabkan '), write(D), write(' damage pada '), write(A),nl,nl,
         retract(enemy(_,_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL,E)), cekhealthL, !.   
 attack :- 
         inbattle(1),
-        chosentokemonmon(X,_), tokemon(X,_,Att,_,_,_,_), enemy(A,HP,B,C,TypeL,E),
+        chosentokemon(X,_), tokemon(X,_,Att,_,_,_,_), enemy(A,HP,B,C,TypeL,E),
         Z is (HP - Att),
         write('Kamu menyebabkan '), write(Att), write(' damage pada '), write(A),nl,nl,
         retract(enemy(_,_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL,E)), cekhealthL, !.
@@ -65,7 +65,7 @@ specialAttack :-
         write('Kamu tidak sedang bertarung'),nl,!.
 specialAttack :- 
         inbattle(1), 
-        chosentokemonmon(X,1), tokemon(X,_,_,Skill,TypeM,_,_), enemy(A,HP,B,C,TypeL,E),
+        chosentokemon(X,1), tokemon(X,_,_,Skill,TypeM,_,_), enemy(A,HP,B,C,TypeL,E),
         strong(TypeM, TypeL), D is div(Skill * 3, 2), Z is HP - D,
         write('Serangannya sangat efektif!'), nl,
         write('Kamu menyebabkan '), write(D), write(' damage pada '), write(A),nl,nl,   
@@ -73,7 +73,7 @@ specialAttack :-
         retract(chosentokemonmon(X,1)), asserta(chosentokemonmon(X,0)), cekhealthL, !.              
 specialAttack :- 
         inbattle(1), 
-        chosentokemonmon(X,1), tokemon(X,_,_,Skill,TypeM,_,_), enemy(A,HP,B,C,TypeL,E),
+        chosentokemon(X,1), tokemon(X,_,_,Skill,TypeM,_,_), enemy(A,HP,B,C,TypeL,E),
         strong(TypeL, TypeM), D is div(Skill, 2), Z is HP - D,
         write('Serangannya tidak efektif!'), nl, 
         write('Kamu menyebabkan '), write(D), write(' damage pada '), write(A),nl,nl,   
@@ -81,34 +81,34 @@ specialAttack :-
         retract(chosentokemonmon(X,1)), asserta(chosentokemonmon(X,0)), cekhealthL, !.
 specialAttack :-  
         inbattle(1),
-        chosentokemonmon(X,1), tokemon(X,_,_,Skill,_,_,_), enemy(A,HP,B,C,TypeL,E),
+        chosentokemon(X,1), tokemon(X,_,_,Skill,_,_,_), enemy(A,HP,B,C,TypeL,E),
         Z is (HP - Skill),
         write('Kamu menyebabkan '), write(Skill), write(' damage pada '), write(A),nl,nl,   
         retract(enemy(_,_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL,E)),
         retract(chosentokemonmon(X,1)), asserta(chosentokemonmon(X,0)), cekhealthL, !.
 specialAttack :-  
-        chosentokemonmon(X,N), N =< 1, write(X), write(' sudah memakai Skill Attack!'), nl.
+        chosentokemon(X,N), N =< 1, write(X), write(' sudah memakai Skill Attack!'), nl.
 
 attacked :- 
-        chosentokemonmon(X,_), tokemon(X,HP,A,B,TypeM,E,F), enemy(C,_,Att,_,TypeL,_),
+        chosentokemon(X,_), tokemon(X,HP,A,B,TypeM,E,F), enemy(C,_,Att,_,TypeL,_),
         strong(TypeM, TypeL), D is div(Att, 2), Z is HP - D,
         write('Serangannya tidak efektif!'), nl, 
         write(C), write(' menyebabkan '), write(D), write(' damage pada '), write(X), nl, nl,
         retract(tokemon(X,_,_,_,_,_,_)), asserta(tokemon(X,Z,A,B,TypeM,E,F)), cekhealthP, !.            
 attacked :- 
-        chosentokemonmon(X,_), tokemon(X,HP,A,B,TypeM,E,F), enemy(C,_,Att,_,TypeL,_),
+        chosentokemon(X,_), tokemon(X,HP,A,B,TypeM,E,F), enemy(C,_,Att,_,TypeL,_),
         strong(TypeL, TypeM), D is div(Att * 3, 2), Z is HP - D,
         write('Serangannya sangat efektif!'), nl,
         write(C), write(' menyebabkan '), write(D), write(' damage pada '), write(X), nl, nl,   
         retract(tokemon(X,_,_,_,_,_,_)), asserta(tokemon(X,Z,A,B,TypeM,E,F)),cekhealthP, !.
 attacked :- 
-        chosentokemonmon(X,_), tokemon(X,HP,A,B,TypeM,E,F), enemy(C,_,Att,_,_,_),
+        chosentokemon(X,_), tokemon(X,HP,A,B,TypeM,E,F), enemy(C,_,Att,_,_,_),
         Z is (HP - Att),
         write(C), write(' menyebabkan '), write(Att), write(' damage pada '), write(X), nl, nl,   
         retract(tokemon(X,_,_,_,_,_,_)), asserta(tokemon(X,Z,A,B,TypeM,E,F)),cekhealthP, !.
 
 life :- 
-        chosentokemonmon(X,_), tokemon(X,HPP,_,_,TypeP,LevelP,_), enemy(Y,HPL,_,_,TypeL,LevelL),
+        chosentokemon(X,_), tokemon(X,HPP,_,_,TypeP,LevelP,_), enemy(Y,HPL,_,_,TypeL,LevelL),
         write(X), nl, 
         write('Health: '), write(HPP), nl,
         write('Type  : '), write(TypeP), nl, 
@@ -119,13 +119,13 @@ life :-
         write('Level : '), write(LevelL), nl, nl, !.
 
 cekhealthP :- 
-        chosentokemonmon(X,_), tokemon(X,HPP,_,_,_,_,_), HPP =< 0, 
+        chosentokemon(X,_), tokemon(X,HPP,_,_,_,_,_), HPP =< 0, 
         write(X), write(' meninggal!'),nl,nl,
-        retract(inbattle(1)),asserta(inbattle(0)), retract(chosentokemonmon(X,_)), 
+        retract(inbattle(1)),asserta(inbattle(0)), retract(chosentokemon(X,_)), 
         retract(tokemon(X,_,_,_,_,_,_)),
         cektokemon,!.
 cekhealthP :- 
-        chosentokemonmon(X,_), tokemon(X,HPP,_,_,_,_,_), HPP > 0, 
+        chosentokemon(X,_), tokemon(X,HPP,_,_,_,_,_), HPP > 0, 
         life, !.        
 
 cekhealthL :- 
@@ -199,15 +199,15 @@ change(A) :-
         \+ losing, 
         inbattle(1), 
         tokemon(A,_,_,_,_,_,_),
-        chosentokemonmon(X,_), 
+        chosentokemon(X,_), 
         A =:= X, 
         write('Kamu sedang memakai Tokemon '), write(A), nl, !.
 change(A) :- 
         \+ losing, 
         inbattle(1), 
         tokemon(A,_,_,_,_,_,_),
-        chosentokemonmon(X,_), 
+        chosentokemon(X,_), 
         A \= X,
         write('Kembalilah '), write(A), nl,
-        retract(chosentokemonmon(X,_)), asserta(chosentokemonmon(A,1)),
+        retract(chosentokemon(X,_)), asserta(chosentokemon(A,1)),
         write('Maju, '), write(A), nl, !.
