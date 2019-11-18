@@ -275,10 +275,11 @@ dalamGym :-
 
 /* MELAKUKAN RETREAT PADA TOKEMON */
 retreat(Tokemon) :-
-(health(Tokemon, Current), maxhealth(Tokemon, Max), Current is Max).
+(health(Tokemon, Current), maxhealth(Tokemon, Max), Current is Max),
+asserta(health(Tokemon, Current)).
 
 /* HEALING PROCESS
-heal :-
+healGym(N) :-
 dalamGym,
 playerStatus(Inventory, NbToke),
 
