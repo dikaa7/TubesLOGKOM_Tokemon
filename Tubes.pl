@@ -28,39 +28,40 @@ start:- write('   ██████╗  ██████╗ █████�
 		write('But your final mission is to defeat or capture all those legendary tokemon, if you fail, '),nl,
 		write('you will be out from this world.            '),
 		help,
-		init_game.
+		init_game,
+		initChar.
 
 /* TOKEMON HEALTH FACTS */
-health(dragonite,101).
-health(firara,62).
-health(burster,73).
-health(bulbaur,65).
-health(oddi,56).
-health(exegg,78).
-health(enax, 55).
-health(alon, 55).
-health(segirock, 120).
-health(rain,80).
-health(octomon,65).
-health(dragostorm,50).
+health(1,101).
+health(2,62).
+health(3,73).
+health(4,65).
+health(5,56).
+health(6,78).
+health(7,55).
+health(8,55).
+health(9,120).
+health(10,80).
+health(11,65).
+health(12,50).
 
 /* TOKEMON MAX HEALTH FACTS */
-maxhealth(dragonite,101).
-maxhealth(firara,62).
-maxhealth(burster,73).
-maxhealth(bulbaur,65).
-maxhealth(oddi,56).
-maxhealth(exegg,78).
-maxhealth(enax, 55).
-maxhealth(alon, 55).
-maxhealth(segirock, 120).
-maxhealth(rain,80).
-maxhealth(octomon,65).
-maxhealth(dragostorm,50).
+maxhealth(1,101).
+maxhealth(2,62).
+maxhealth(3,73).
+maxhealth(4,65).
+maxhealth(5,56).
+maxhealth(6,78).
+maxhealth(7,55).
+maxhealth(8,55).
+maxhealth(9,120).
+maxhealth(10,80).
+maxhealth(11,65).
+maxhealth(12,50).
 
 /* TOKEMON TYPE FACTS */
-type(enax, rock).
-type(alon, rock).
+type(enax,rock).
+type(alon,rock).
 type(segirock, rock).
 type(dragonite,fire).
 type(firara,fire).
@@ -71,6 +72,7 @@ type(exegg,grass).
 type(rain,water).
 type(octomon,water).
 type(dragostorm,water).
+
 
 /* TOKEMON NORMAL ATTACK FACTS */
 normalAttack(enax, 12).
@@ -114,6 +116,19 @@ rarity(rain,normal).
 rarity(octomon,normal).
 rarity(dragostorm,normal).
 
+id(dragonite,1).
+id(firara,2).
+id(burster,3).
+id(bulbaur,4).
+id(oddi,5).
+id(exegg,6).
+id(enax,7).
+id(alon,8).
+id(segirock,9).
+id(rain,10).
+id(octomon,11).
+id(dragostorm,12).
+
 map_size(0,21).
 
 test:- rarity(X,Y), X==dragonite, write(Y).
@@ -137,9 +152,8 @@ write('- G = Gym'),nl.
 /* Variabel Dinamik */
 :- dynamic(player_location/2).
 :- dynamic(player_tokemon/1).
-:- dynamic(tokemon_health/2).
 :- dynamic(legend_count/2).
-:- dynamic(playerStatus/3).
+:- dynamic(playerStatus/2).
 
 /* Fact Dinamik */
 dynamic_facts :-
@@ -152,6 +166,7 @@ retractall(legend_count(_X)).
 initNbToke(1).
 
 randomFirstTokemon(RandomToke) :-
+
 random(1, 12, Nr), 
 Nr\==1,
 Nr\==9,
@@ -165,9 +180,8 @@ initChar:-
     initNbToke(NbToke),
     initTokeList(TokeList),
     randomFirstTokemon(Random),
-    CurrentTokemon is Random,
     append([Random], TokeList, NewTokeList),
-    asserta(playerStatus(NewTokeList, NbToke, CurrentTokemon)), !.
+    asserta(playerStatus(NewTokeList, NbToke)), !.
 
 /* INITIATE GAME */
 init_game:- asserta(player_location(1,1)),
@@ -268,7 +282,28 @@ dalamGym,
 playerStatus(Inventory, NbToke),
 
 retreat */
-
+status:- playerStatus(TokemonList1, NbTokemon),
+		write('Your Tokemon:'),nl,
+		printstatus(TokemonList1, NbTokemon),!.
+printstatus(TokemonL,NbTokemon):- NbTokemon == 0,
+								nl,write('Your Enemy : '),nl,
+									id(TokemonName,1),
+									write(TokemonName),nl,
+									health(1,Health),
+									write('Health:'),write(Health),nl,
+									id(TokemonName1,9),
+									write(TokemonName1),nl,
+									health(9,Health2),
+									write('Health:'),write(Health2),nl.
+printstatus(TokemonL,NbTokemon):- NbTokemon > 0,
+								[Head|T] = TokemonL,
+								 id(TokemonName,Head),
+								 write(TokemonName),nl,
+								 health(Head,Health1),
+								 write('Health :'),write(Health1),nl,
+								 NbToke is NbTokemon-1,
+								 printstatus(T,NbToke).
+			
 /* ADD CAPTURED TOKEMON TO INVENTORY */
 addTokemon(CapturedT) :-
 retract(playerStatus(TokemonList, NbTokemon)),
@@ -288,7 +323,7 @@ delete_one(Term, [Term|Tail], Tail) :- !.
 delete_one(Term, [Head|Tail], [Head|Result]) :-
     delete_one(Term, Tail, Result).
 
- :- dynamic(playerStatus/3).
+ :- dynamic(playerStatus/2).
 
 /* SAVE */
 
