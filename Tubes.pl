@@ -526,6 +526,8 @@ strong(water,fire).
 strong(rock,fire).
 strong(water,rock).
 
+inbattle(0).
+
 /* State saat kalah dan menang */
 /* loseCondition :- %kondisi kalah
 # winCondition :- %kondisi menang*/
