@@ -519,7 +519,7 @@ choose1(Id,TokemonList,NbTokemon) :- NbTokemon == 0,
 choose(X) :- id(X,Id),playerStatus(TokemonL,NbToke),
 			choose1(Id,TokemonL,NbToke).
 choose2(X) :- 
-        inbattle(1),
+        inbattle(Ta),Ta == 1,
         tokemon(X,_,_,_,_,_), asserta(chosentokemon(X,1)),
         write('Keluarlah,"'),write(X),write('"'),nl,nl, life, !.
 choose2(_) :- 
@@ -625,7 +625,8 @@ cekhealthP :-
         chosentokemon(X,_), tokemon(X,HPP,_,_,_,_), HPP =< 0, 
         write(X), write(' meninggal!'),nl,nl,
         retract(inbattle(1)),asserta(inbattle(0)), retract(chosentokemon(X,_)), 
-        retract(tokemon(X,_,_,_,_,_)),
+        retract(tokemon(X,Ta,Tb,Tc,Td,Te)),
+        asserta(tokemon(X,0,Tb,Tc,Td,Te)),
         retract(banyak(Ta)),
         Tb is Ta+1,
         asserta(banyak(Tb)),
@@ -651,7 +652,9 @@ cekhealthL :-
         life,
         write(X), write(' menyerang!'), nl, 
         attacked, !.        
-
+capture:- playerStatus(TokeList,NbToke), 
+         NbToke == 6,
+         write('TOkemon anda penuh silahkan drop terlebih dahulu!'),nl,!.
 capture :-
         \+ loseCondition,
         inbattle(Ta),Ta == 2,
