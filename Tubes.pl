@@ -148,7 +148,7 @@ write('- G = Gym'),nl.
 :- dynamic(player_tokemon/1).
 :- dynamic(health/2).
 :- dynamic(position/3).
-:- dynamic(legend_count/2).
+:- dynamic(legend_count/1).
 :- dynamic(playerStatus/2).
 
 /* Fact Dinamik */
@@ -362,119 +362,84 @@ delete_one(Term, [Head|Tail], [Head|Result]) :-
 
 /* SAVE */
 
-save_game :-
-nl, write('Name of your file : '),
-nl, read(File),
-atom_concat(File, '.txt', Filetext),
-open(Filetext, write, Stream),
-save_all(Stream),
-close(Stream),
-write('Saved !'), nl.
+save :-
+			nl, write('Masukkan nama file untuk menyimpan game-mu!'), nl,
+			write('% '), 
+			read(File),
+			atom_concat(File, '.txt', Filetxt),
+			open(Filetxt, write, Ekstern),
+			savecfg(Ekstern),
+			close(Ekstern),
+			write('Game-mu telah berhasil disimpan!'), nl.
 
-save_all(S) :- save_player_tokemon, save(S), !.
 
-save(S) :-
-playerStatus(A),
-player_location(X,Y),
-player_tokemon(B),
-tokemon_health(C,D),
-legend_count(E),
-tell(S),
-write(A), write('.'), nl,
-write(X), write('.'), nl,
-write(Y), write('.'), nl,
-write(B), write('.'), nl,
-forall((player_tokemon(BB), BB\= B, BB \= none)), (write(BB), write('.'), nl),
-write('done.'), nl,
-write(C), write('.'), nl,
-write(D), write('.'), nl,
-forall((tokemon_health(CC,DD), CC\= C, CC \= none)), (write(CC), write('.'), nl), (write(DD), write('.'), nl),
-write('done.'), nl,
-write(E), write('.'),told,!.
+savecfg(Ekstern) :-
+				saveposition(Ekstern).
+savecfg(Ekstern) :-
+				saveNbLegend(Ekstern).
+savecfg(Ekstern) :-
+				saveTokeStats(Ekstern).
+savecfg(Ekstern) :-
+				savePlStatus(Ekstern).
+savecfg(Ekstern) :-
+				saveTokePosition(Ekstern).
+savecfg(_) :- !.
 
-save_player_tokemon :-
-\+ player_tokemon(_,_),
-asserta(player_tokemon(none,0)).
 
-save_player_tokemon.
-/*
-save_all(Stream) :-
-save_playerStatus(Stream).
+saveposition(Ekstern) :-
+			 	player_location(X,Y),
+				write(Ekstern, player_location(X,Y)), 
+				write(Ekstern, '.'), 
+				nl(Ekstern),
+				fail.
 
-save_all(Stream) :-
-save_player_location(Stream).
+saveNbLegend(Ekstern) :-
+				legend_count(X),
+				write(Ekstern, legend_count(X)), 
+				write(Ekstern, '.'), 
+				nl(Ekstern),
+				fail.
+saveTokeStats(Ekstern) :-
+				tokemon(A,B,C,D,E,F),
+				write(Ekstern, tokemon(A,B,C,D,E,F)),
+				write(Ekstern, '.'),
+				nl(Ekstern),
+				fail.
+savePlStatus(Ekstern) :-
+			 	playerStatus(X,Y),
+				write(Ekstern, playerStatus(X,Y)), 
+				write(Ekstern, '.'), 
+				nl(Ekstern),
+				fail.
+saveTokePosition(Ekstern) :-
+			 	position(G,H,I),
+				write(Ekstern, position(G,H,I)), 
+				write(Ekstern, '.'), 
+				nl(Ekstern),
+				fail.
 
-save_all(Stream) :-
-save_player_tokemon(Stream).
+/* LOAD STATE */
 
-save_all(Stream) :-
-save_tokemon_health(Stream).
-*/
-/*save_all(Stream) :-
-save_legend_count(Stream).*/
-/*
-save_playerStatus(Stream) :-
-playerStatus(TokemonList,NbTokemon),
-write(Stream,TokemonList),
-write(Stream,NbTokemon),
-write(Stream, '.'),
-nl(Stream),
-fail.
+loadgame :-
+				nl, write('Input file load!') , nl,
+				write('>') , read(File),
+				atom_concat(File,'.txt',Filetxt),
+				load_all_fact(Filetxt).
 
-save_player_location(Stream) :-
-player_location(X,Y),
-write(Stream,X),
-write(Stream,Y),
-write(Stream, '.'),
-nl(Stream),
-fail.
+load_all_fact(Filetxt) :-
+				retractall(enemy(_,_,_,_)),
+				retractall(player(_,_,_,_,_,_,_)),
+				retractall(location(_,_,_)),
+				open(Filetxt, read, Stream),
+				repeat,
+						read(Stream, In),
+						asserta(In),
+				at_end_of_stream(Stream),
+				close(Stream),
+				nl, write('Your File is loaded!'), nl, !.
 
-save_player_tokemon(Stream) :-
-player_tokemon(X),
-write(Stream,X),
-write(Stream,'.'),
-nl(Stream),
-fail.
-
-save_tokemon_health(Stream) :-
-tokemon_health(X,Y),
-write(Stream,X),
-write(Stream,Y),
-write(Stream, '.'),
-nl(Stream),
-fail.
-
-save_legend_count(Stream) :-
-legend_count(X),
-write(Stream,X),
-write(Stream, '.'),
-nl(Stream),
-fail.
-*/
-/* LOAD */
-
-load_game :-
-nl, write('Name of your file : '),
-nl, read(File),
-atom_concat(File, '.txt', Filetext),
-load_all(Filetext).
-
-load_all(Filetext) :-
-retractall(playerStatus(_,_)),
-retractall(player_location(_,_)),
-retractall(player_tokemon(_)),
-retractall(tokemon_health(_,_)),
-retractall(legend_count(_)),
-open(Filetext, read, Stream),
-repeat,
-read(Stream, In),
-asserta(In),
-at_end_of_stream(Stream),
-close(Stream,
-nl, write('Loaded !')), nl, !.
-
-load_all(_) :-
-nl, write('Wrong input !'), nl, fail.
+load_all_fact(_):-
+			  nl, write('Your input is wrong!'), nl, fail.
 
 /* NYEBAR POKEMON */
 randomTokemon :-
@@ -499,6 +464,7 @@ spread_tokemon(B) :-
 			asserta(gym_pos2(14,12)).
 /* File untuk saat tokemon bertarung */
 /* File untuk saat tokemon bertarung */
+
 :- dynamic(enemy/5).
 :- dynamic(tokemon/6).
 :- dynamic(chosentokemon/2).
