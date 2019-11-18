@@ -113,7 +113,10 @@ rarity(segirock,legendary).
 rarity(rain,normal).
 rarity(octomon,normal).
 rarity(dragostorm,normal).
+
 map_size(0,21).
+
+test:- rarity(X,Y), X==dragonite, write(Y).
 
 /* HELP DESK */
 help :-	write('Available commands:'),nl,
