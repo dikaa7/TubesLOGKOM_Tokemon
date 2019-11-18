@@ -309,7 +309,7 @@ dalamGym :-
 
 /* MELAKUKAN RETREAT PADA TOKEMON */
 retreat(Tokemon) :-
-(id(TokemonName,Tokemon),tokemon(TokemonName,Health1,Ta,Tb,Tc,Td), maxhealth(Tokemon, Max),retract(tokemon(TokemonName,Health1,Ta,Tb,Tc,Td)),asserta(tokemon(TokemonName,Max,Ta,Tb,Tc,Td)).
+(id(TokemonName,Tokemon),tokemon(TokemonName,Health1,Ta,Tb,Tc,Td), maxhealth(Tokemon, Max),retract(tokemon(TokemonName,Health1,Ta,Tb,Tc,Td)),asserta(tokemon(TokemonName,Max,Ta,Tb,Tc,Td))).
 
 heal :- playerStatus(TokemonL,NbToke),
 		heal1(TokemonL,NbToke).
@@ -326,10 +326,10 @@ printstatus(TokemonL,NbTokemon):- NbTokemon == 0,
 									id(TokemonName,1),
 									write(TokemonName),nl,
 									tokemon(TokemonName,Health1,_,_,_,_),
-									write('Health:'),write(Health),nl,nl,
+									write('Health:'),write(Health1),nl,
 									id(TokemonName1,9),
 									write(TokemonName1),nl,
-									tokemon(TokemonName,Health2,_,_,_,_),
+									tokemon(TokemonName1,Health2,_,_,_,_),
 									write('Health:'),write(Health2),nl.
 printstatus(TokemonL,NbTokemon):- NbTokemon > 0,
 								[Head|T] = TokemonL,
@@ -385,17 +385,17 @@ write(A), write('.'), nl,
 write(X), write('.'), nl,
 write(Y), write('.'), nl,
 write(B), write('.'), nl,
-forall((player_tokemon(BB), BB\ == B, BB \== none), (write(BB), write('.'), nl)),
+forall((player_tokemon(BB), BB\= B, BB \= none)), (write(BB), write('.'), nl),
 write('done.'), nl,
 write(C), write('.'), nl,
 write(D), write('.'), nl,
-forall((tokemon_health(CC,DD), CC\ == C, CC \== none), (write(BB), write('.'), nl), (write(DD), write('.'), nl)),
+forall((tokemon_health(CC,DD), CC\= C, CC \= none)), (write(CC), write('.'), nl), (write(DD), write('.'), nl),
 write('done.'), nl,
-write(E), write('.'), told, !.
+write(E), write('.'),told,!.
 
 save_player_tokemon :-
 \+ player_tokemon(_,_),
-asserta(player_tokemon(none,0).
+asserta(player_tokemon(none,0)).
 
 save_player_tokemon.
 /*
@@ -499,36 +499,58 @@ spread_tokemon(B) :-
 			asserta(gym_pos1(5,4)),
 			asserta(gym_pos2(14,12)).
 /* File untuk saat tokemon bertarung */
-:- dynamic(lawan/5).
-:- dynamic(chosenToke/2).
-:- dynamic(runorfight/0).
-:- dynamic(losing/0).
-/* :- include('tokemon.pl'). */
+/* File untuk saat tokemon bertarung */
+:- dynamic(enemy/5).
+:- dynamic(tokemon/6).
+:- dynamic(chosentokemon/2).
+:- dynamic(loseCondition/0).
 
-% Pemilihan tokemon 
-pick(_) :- losing, lose, !.
-pick(X) :- 
+/* tokemon(nama,health,normalAttack,specialAttack,type,rarity). */
+tokemon(dragonite,101,38,59,fire,legendary).
+tokemon(firara,62,17,25,fire,normal).
+tokemon(burster,73,13,23,fire,normal).
+tokemon(bulbaur,65,17,25,grass,normal).
+tokemon(oddi,56,19,26,grass,normal).
+tokemon(exegg,78,12,30,grass,normal).
+tokemon(enax,55,12,25,rock,normal).
+tokemon(alon,55,15,22,rock,normal).
+tokemon(segirock,120,35,55,rock,legendary).
+tokemon(rain,80,10,20,water,normal).
+tokemon(octomon,65,15,25,water,normal).
+tokemon(dragostorm,50,20,30,water,normal).
+
+/* Strong Type Tokemon */
+strong(fire,grass).
+strong(grass,water).
+strong(water,fire).
+strong(rock,fire).
+strong(water,rock).
+
+/* State saat kalah dan menang */
+/* loseCondition :- %kondisi kalah
+# winCondition :- %kondisi menang*/
+win :- write('Kamu menang ... :) '),nl,!.
+lose :- write('Kamu kalah.. :P'),nl,!.
+
+
+/* Pemilihan tokemon */
+choose(_) :- loseCondition, lose, !.
+choose(X) :- 
         inbattle(1),
-        toke(X,_,_,_,_,_,_), asserta(chosenToke(X,1)),
+        tokemon(X,_,_,_,_,_), asserta(chosentokemon(X,1)),
         %battle stage ke 1 yaitu saat bertarung(attack dan attacked) 
-        write('You : Saya memilih kamu,"'),write(X),write('"'),nl,nl, life, !.
-
-/* Bingung ini mau digimanain */
-% pick(X) :- 
-%         \+ losing,
-%         inbattle(1),
-%         \+toke(X,_,_,_,_), 
-%         write('Kamu tidak memiliki pokemon tersebut!, Harap memilih ulang!'), nl, !.
-pick(_) :- 
+        write('Keluarlah,"'),write(X),write('"'),nl,nl, life, !.
+        
+choose(_) :- 
         inbattle(1), 
-        chosenToke(X,_),
+        chosentokemon(X,_),
         write('Kamu tidak bisa memilih ulang saat bertarung, harap gunakan "change(X)."'),!.
-pick(_) :- 
+choose(_) :- 
         \+ inbattle(1), 
         write('Kamu tidak sedang bertarung'),nl,!.
 
 attack :- 
-        losing, lose, !.
+        loseCondition, lose, !.
 attack :-
         inbattle(2),
         write('Tokemonnya sudah pingsan!'), nl,!.
@@ -537,27 +559,27 @@ attack :-
         write('Kamu tidak sedang bertarung'),nl,!.
 attack :- 
         inbattle(1), 
-        chosenToke(X,_), toke(X,_,Att,_,TypeM,_,_), lawan(A,HP,B,C,TypeL,E),
+        chosentokemon(X,_), tokemon(X,_,Att,_,TypeM,_), enemy(A,HP,B,C,TypeL),
         strong(TypeM, TypeL), D is div(Att * 3, 2), Z is HP - D,
         write('Serangannya sangat efektif!'), nl,
         write('Kamu menyebabkan '), write(D), write(' damage pada '), write(A),nl,nl,   
-        retract(lawan(_,_,_,_,_,_)), asserta(lawan(A,Z,B,C,TypeL,E)), cekhealthL, !.
+        retract(enemy(_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL)), cekhealthL, !.
 attack :- 
         inbattle(1),
-        chosenToke(X,_), toke(X,_,Att,_,TypeM,_,_), lawan(A,HP,B,C,TypeL,E),
+        chosentokemon(X,_), tokemon(X,_,Att,_,TypeM,_), enemy(A,HP,B,C,TypeL),
         strong(TypeL, TypeM), D is div(Att, 2), Z is HP - D, 
         write('Serangannya tidak efektif!'), nl, 
         write('Kamu menyebabkan '), write(D), write(' damage pada '), write(A),nl,nl,
-        retract(lawan(_,_,_,_,_,_)), asserta(lawan(A,Z,B,C,TypeL,E)), cekhealthL, !.   
+        retract(enemy(_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL)), cekhealthL, !.   
 attack :- 
         inbattle(1),
-        chosenToke(X,_), toke(X,_,Att,_,_,_,_), lawan(A,HP,B,C,TypeL,E),
+        chosentokemon(X,_), tokemon(X,_,Att,_,_,_), enemy(A,HP,B,C,TypeL),
         Z is (HP - Att),
         write('Kamu menyebabkan '), write(Att), write(' damage pada '), write(A),nl,nl,
-        retract(lawan(_,_,_,_,_,_)), asserta(lawan(A,Z,B,C,TypeL,E)), cekhealthL, !.
+        retract(enemy(_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL)), cekhealthL, !.
 
 specialAttack :- 
-        losing, lose, !.
+        loseCondition, lose, !.
 specialAttack :-
         inbattle(2),
         write('Tokemonnya sudah pingsan!'), nl,!.
@@ -566,149 +588,148 @@ specialAttack :-
         write('Kamu tidak sedang bertarung'),nl,!.
 specialAttack :- 
         inbattle(1), 
-        chosenToke(X,1), toke(X,_,_,Skill,TypeM,_,_), lawan(A,HP,B,C,TypeL,E),
-        strong(TypeM, TypeL), D is div(Skill * 3, 2), Z is HP - D,
+        chosentokemon(X,1), tokemon(X,_,_,Special,TypeM,_), enemy(A,HP,B,C,TypeL),
+        strong(TypeM, TypeL), D is div(Special * 3, 2), Z is HP - D,
         write('Serangannya sangat efektif!'), nl,
         write('Kamu menyebabkan '), write(D), write(' damage pada '), write(A),nl,nl,   
-        retract(lawan(_,_,_,_,_,_)), asserta(lawan(A,Z,B,C,TypeL,E)),
-        retract(chosenToke(X,1)), asserta(chosenToke(X,0)), cekhealthL, !.              
+        retract(enemy(_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL)),
+        retract(chosentokemonmon(X,1)), asserta(chosentokemonmon(X,0)), cekhealthL, !.              
 specialAttack :- 
         inbattle(1), 
-        chosenToke(X,1), toke(X,_,_,Skill,TypeM,_,_), lawan(A,HP,B,C,TypeL,E),
-        strong(TypeL, TypeM), D is div(Skill, 2), Z is HP - D,
+        chosentokemon(X,1), tokemon(X,_,_,Special,TypeM,_), enemy(A,HP,B,C,TypeL),
+        strong(TypeL, TypeM), D is div(Special, 2), Z is HP - D,
         write('Serangannya tidak efektif!'), nl, 
         write('Kamu menyebabkan '), write(D), write(' damage pada '), write(A),nl,nl,   
-        retract(lawan(_,_,_,_,_,_)), asserta(lawan(A,Z,B,C,TypeL,E)),
-        retract(chosenToke(X,1)), asserta(chosenToke(X,0)), cekhealthL, !.
+        retract(enemy(_,_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL,E)),
+        retract(chosentokemonmon(X,1)), asserta(chosentokemonmon(X,0)), cekhealthL, !.
 specialAttack :-  
         inbattle(1),
-        chosenToke(X,1), toke(X,_,_,Skill,_,_,_), lawan(A,HP,B,C,TypeL,E),
-        Z is (HP - Skill),
-        write('Kamu menyebabkan '), write(Skill), write(' damage pada '), write(A),nl,nl,   
-        retract(lawan(_,_,_,_,_,_)), asserta(lawan(A,Z,B,C,TypeL,E)),
-        retract(chosenToke(X,1)), asserta(chosenToke(X,0)), cekhealthL, !.
+        chosentokemon(X,1), tokemon(X,_,_,Special,_,_), enemy(A,HP,B,C,TypeL),
+        Z is (HP - Special),
+        write('Kamu menyebabkan '), write(Special), write(' damage pada '), write(A),nl,nl,   
+        retract(enemy(_,_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL)),
+        retract(chosentokemonmon(X,1)), asserta(chosentokemonmon(X,0)), cekhealthL, !.
 specialAttack :-  
-        chosenToke(X,N), N =< 1, write(X), write(' sudah memakai Skill Attack!'), nl.
+        chosentokemon(X,N), N =< 1, write(X), write(' sudah memakai Special Attack!'), nl.
 
 attacked :- 
-        chosenToke(X,_), toke(X,HP,A,B,TypeM,E,F), lawan(C,_,Att,_,TypeL,_),
+        chosentokemon(X,_), tokemon(X,HP,A,B,TypeM,E), enemy(C,_,Att,_,TypeL),
         strong(TypeM, TypeL), D is div(Att, 2), Z is HP - D,
         write('Serangannya tidak efektif!'), nl, 
         write(C), write(' menyebabkan '), write(D), write(' damage pada '), write(X), nl, nl,
-        retract(toke(X,_,_,_,_,_,_)), asserta(toke(X,Z,A,B,TypeM,E,F)), cekhealthP, !.            
+        retract(tokemon(X,_,_,_,_,_)), asserta(tokemon(X,Z,A,B,TypeM,E)), cekhealthP, !.            
 attacked :- 
-        chosenToke(X,_), toke(X,HP,A,B,TypeM,E,F), lawan(C,_,Att,_,TypeL,_),
+        chosentokemon(X,_), tokemon(X,HP,A,B,TypeM,E), enemy(C,_,Att,_,TypeL),
         strong(TypeL, TypeM), D is div(Att * 3, 2), Z is HP - D,
         write('Serangannya sangat efektif!'), nl,
         write(C), write(' menyebabkan '), write(D), write(' damage pada '), write(X), nl, nl,   
-        retract(toke(X,_,_,_,_,_,_)), asserta(toke(X,Z,A,B,TypeM,E,F)),cekhealthP, !.
+        retract(tokemon(X,_,_,_,_,_)), asserta(tokemon(X,Z,A,B,TypeM,E)),cekhealthP, !.
 attacked :- 
-        chosenToke(X,_), toke(X,HP,A,B,TypeM,E,F), lawan(C,_,Att,_,_,_),
+        chosentokemon(X,_), tokemon(X,HP,A,B,TypeM,E), enemy(C,_,Att,_,_,_),
         Z is (HP - Att),
         write(C), write(' menyebabkan '), write(Att), write(' damage pada '), write(X), nl, nl,   
-        retract(toke(X,_,_,_,_,_,_)), asserta(toke(X,Z,A,B,TypeM,E,F)),cekhealthP, !.
+        retract(tokemon(X,_,_,_,_,_)), asserta(tokemon(X,Z,A,B,TypeM,E)),cekhealthP, !.
 
 life :- 
-        chosenToke(X,_), toke(X,HPP,_,_,TypeP,LevelP,_), lawan(Y,HPL,_,_,TypeL,LevelL),
+        chosentokemon(X,_), tokemon(X,HPP,_,_,TypeP,_), enemy(Y,HPL,_,_,TypeL),
         write(X), nl, 
         write('Health: '), write(HPP), nl,
         write('Type  : '), write(TypeP), nl, 
-        write('Level : '), write(LevelP), nl, nl,
+		write('========================='),nl,
         write(Y), nl, 
         write('Health: '), write(HPL), nl,
-        write('Type  : '), write(TypeL), nl, 
-        write('Level : '), write(LevelL), nl, nl, !.
+        write('Type  : '), write(TypeL), nl, !.
 
 cekhealthP :- 
-        chosenToke(X,_), toke(X,HPP,_,_,_,_,_), HPP =< 0, 
+        chosentokemon(X,_), tokemon(X,HPP,_,_,_,_), HPP =< 0, 
         write(X), write(' meninggal!'),nl,nl,
-        retract(inbattle(1)),asserta(inbattle(0)), retract(chosenToke(X,_)), 
-        retract(toke(X,_,_,_,_,_,_)),
+        retract(inbattle(1)),asserta(inbattle(0)), retract(chosentokemon(X,_)), 
+        retract(tokemon(X,_,_,_,_,_)),
         cektokemon,!.
 cekhealthP :- 
-        chosenToke(X,_), toke(X,HPP,_,_,_,_,_), HPP > 0, 
+        chosentokemon(X,_), tokemon(X,HPP,_,_,_,_), HPP > 0, 
         life, !.        
 
 cekhealthL :- 
-        lawan(Y,HPL,_,_,_,_), HPL =< 0, 
+        enemy(Y,HPL,_,_,_), HPL =< 0, 
         write(Y), write(' pingsan! Apakah kamu mau menangkapnya?'),nl,nl,
         write('Jika ingin menangkapnya, berikan perintah capture.'),nl,
-        write('Jika tidak ingin, berikan perintah nope.'), nl,
+        write('Jika tidak ingin, berikan perintah lanjut.'), nl,
         retract(inbattle(1)),asserta(inbattle(2)),!.        
 cekhealthL :- 
-        lawan(X,HPL,_,_,_,_), HPL > 0, 
+        enemy(X,HPL,_,_,_,_), HPL > 0, 
         life,
         write(X), write(' menyerang!'), nl, 
         attacked, !.        
 
 capture :-
-        \+ losing,
+        \+ loseCondition,
         inbattle(2),
-        lawan(X,_,_,_,_,_), tokemon(X,B,C,D,E,F,G), asserta(avChoose), 
-        addToke(X,B,C,D,E,F,G), retract(lawan(X,_,_,_,_,_)), 
+        enemy(X,_,_,_,_), tokemon(X,B,C,D,E,F), asserta(avChoose), 
+        addtokemon(X,B,C,D,E,F), retract(enemy(X,_,_,_,_)), 
         retract(inbattle(2)), 
         nl, map, !.
 
-nope :- 
-        \+ losing,
+lanjut :- 
+        \+ loseCondition,
         inbattle(2),
-        lawan(X,_,_,_,_,_), 
-        write(X), write(' pun sadar'), nl,
-        write(X), write('(dalam bahasa Tokemon) : Dasar belagu'), nl,
+        enemy(X,_,_,_,_), 
         write(X), write(' meninggalkan kamu'), nl,
-        retract(lawan(X,_,_,_,_,_)), 
+        retract(enemy(X,_,_,_,_,_)), 
         retract(inbattle(2)), 
         nl, map, !.
 
+/* Mengecek Tokemon dalam inventory */
 cektokemon :- 
-        cekToke(Banyak), Banyak > 1, !,
+        cektokemon(Banyak), Banyak > 1, !,
         write('Kamu masih memiliki sisa Tokemon!'), nl,
         write('Sisa Tokemon : ['),
-        toke(H,I,J,K,L,M,N), write(H),
-        retract(toke(H,I,J,K,L,M)),
-        toke(_,_,_,_,_,_,_) -> (
-                forall(toke(A,_,_,_,_,_,_),
+        tokemon(H,I,J,K,L,M), write(H),
+        retract(tokemon(H,I,J,K,L,M)),
+        tokemon(_,_,_,_,_,_) -> (
+                forall(tokemon(A,_,_,_,_,_),
                 (
                 write(','),
                 write(A)
                 ))
         ),
         write(']'),nl, 
-        asserta(toke(H,I,J,K,L,M,N)),
-        write('Pilih Tokemon sekarang dengan berikan perintah pick(NamaTokemon)'), asserta(inbattle(1)), !.
+        asserta(tokemon(H,I,J,K,L,M)),
+        write('Pilih Tokemon sekarang dengan berikan perintah choose(NamaTokemon)'), asserta(inbattle(1)), !.
 cektokemon :- 
-        cekToke(Banyak), Banyak =:= 1, 
+        cektokemon(Banyak), Banyak =:= 1, 
         write('Sisa Tokemon : ['),
-        toke(H,_,_,_,_,_,_), write(H),
+        tokemon(H,_,_,_,_,_), write(H),
         write(']'),nl,
         asserta(inbattle(1)), !. 
 cektokemon :- 
-        cekToke(Banyak), Banyak =:= 0, asserta(losing), lose,!.
+        cektokemon(Banyak), Banyak =:= 0, asserta(loseCondition), lose,!.
 
+/* Tukar tokemon dalam list */
 change(_) :- 
-        losing, lose, !.
+        loseCondition, lose, !.
 change(_) :- 
-        \+ losing,
+        \+ loseCondition,
         \+ inbattle(1), 
         write('Kamu tidak sedang bertarung!'),nl,!.
 change(A) :- 
-        \+ losing, 
+        \+ loseCondition, 
         inbattle(1), 
-        \+(toke(A,_,_,_,_,_,_)),
+        \+(tokemon(A,_,_,_,_,_)),
         write('Kamu tidak memiliki Tokemon tersebut!'), nl, !.
 change(A) :- 
-        \+ losing, 
+        \+ loseCondition, 
         inbattle(1), 
-        toke(A,_,_,_,_,_,_),
-        chosenToke(X,_), 
+        tokemon(A,_,_,_,_,_),
+        chosentokemon(X,_), 
         A =:= X, 
         write('Kamu sedang memakai Tokemon '), write(A), nl, !.
 change(A) :- 
-        \+ losing, 
+        \+ loseCondition, 
         inbattle(1), 
-        toke(A,_,_,_,_,_,_),
-        chosenToke(X,_), 
+        tokemon(A,_,_,_,_,_),
+        chosentokemon(X,_), 
         A \= X,
         write('Kembalilah '), write(A), nl,
-        retract(chosenToke(X,_)), asserta(chosenToke(A,1)),
+        retract(chosentokemon(X,_)), asserta(chosentokemon(A,1)),
         write('Maju, '), write(A), nl, !.

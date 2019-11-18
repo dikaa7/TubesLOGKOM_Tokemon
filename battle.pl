@@ -1,5 +1,6 @@
 /* File untuk saat tokemon bertarung */
-:- dynamic(lawan/5).
+:- dynamic(enemy/5).
+:- dynamic(tokemon/6).
 :- dynamic(chosentokemon/2).
 :- dynamic(loseCondition/0).
 
@@ -133,7 +134,7 @@ life :-
         write(X), nl, 
         write('Health: '), write(HPP), nl,
         write('Type  : '), write(TypeP), nl, 
-      
+		write('========================='),nl,
         write(Y), nl, 
         write('Health: '), write(HPL), nl,
         write('Type  : '), write(TypeL), nl, !.
