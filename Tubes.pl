@@ -162,10 +162,18 @@ retractall(legend_count(_X)).
 initNbToke(1).
 
 randomFirstTokemon(RandomToke) :-
+<<<<<<< HEAD
 random(1, 12, Nr),
 Nr\=9,
 Nr\=1,
 RandomToke is Nr.
+=======
+random(1, 12, Nr), 
+Nr\==1,
+Nr\==9,
+id(Toke, Nr),
+RandomToke is Toke.
+>>>>>>> 2783899be06c50e54ed7b63877628df33f93dc16
 
 initTokeList([]).
 
@@ -322,7 +330,11 @@ delete_one(Term, [Head|Tail], [Head|Result]) :-
 /* SAVE */
 
 save_game :-
+<<<<<<< HEAD
  write('Name of your file : '),
+=======
+nl, write('Name of your file : '),
+>>>>>>> 2783899be06c50e54ed7b63877628df33f93dc16
 nl, read(File),
 atom_concat(File, '.txt', Filetext),
 open(Filetext, write, Stream),
@@ -383,7 +395,11 @@ fail.
 /* LOAD */
 
 load_game :-
+<<<<<<< HEAD
  write('Name of your file : '),
+=======
+nl, write('Name of your file : '),
+>>>>>>> 2783899be06c50e54ed7b63877628df33f93dc16
 nl, read(File),
 atom_concat(File, '.txt', Filetext),
 load_all(Filetext).
@@ -403,4 +419,30 @@ close(Stream,
 nl, write('Loaded !')), nl, !.
 
 load_all(_) :-
+<<<<<<< HEAD
  write('Wrong input !'), nl, fail.
+=======
+nl, write('Wrong input !'), nl, fail.
+
+/* NYEBAR POKEMON */
+randomTokemon :-
+    repeat,
+    random(1, 12, A), id(Z, A),
+    random(0, 19, X), random(0, 19, Y),
+    gym_pos1(Xa,Ya), gym_pos2(Xb, Yb),
+    X\==Xa,
+    X\==Xb,
+    Y\==Ya,
+    Y\==Yb,
+    asserta(tokemon_pos(X,Y,Z)).
+
+spread_tokemon(0) :-!.
+spread_tokemon(B) :-
+    randomTokemon,
+    C is B-1,
+    init_weapon(C).
+
+ init_game:- asserta(player_location(1,1)),
+			asserta(gym_pos1(5,4)),
+			asserta(gym_pos2(14,12)).
+>>>>>>> 2783899be06c50e54ed7b63877628df33f93dc16
