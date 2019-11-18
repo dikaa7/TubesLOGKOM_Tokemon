@@ -1,7 +1,21 @@
 /* File untuk saat tokemon bertarung */
 :- dynamic(lawan/5).
 :- dynamic(chosentokemon/2).
-:- dynamic(losing/0).
+:- dynamic(loseCondition/0).
+
+/* tokemon(nama,health,normalAttack,specialAttack,type,rarity). */
+tokemon(dragonite,101,38,59,fire,legendary).
+tokemon(firara,62,17,25,fire,normal).
+tokemon(burster,73,13,23,fire,normal).
+tokemon(bulbaur,65,17,25,grass,normal).
+tokemon(oddi,56,19,26,grass,normal).
+tokemon(exegg,78,12,30,grass,normal).
+tokemon(enax,55,12,25,rock,normal).
+tokemon(alon,55,15,22,rock,normal).
+tokemon(segirock,120,35,55,rock,legendary).
+tokemon(rain,80,10,20,water,normal).
+tokemon(octomon,65,15,25,water,normal).
+tokemon(dragostorm,50,20,30,water,normal).
 
 /* Strong Type Tokemon */
 strong(fire,grass).
@@ -10,9 +24,15 @@ strong(water,fire).
 strong(rock,fire).
 strong(water,rock).
 
+/* State saat kalah dan menang */
+loseCondition :- %kondisi kalah
+winCondition :- %kondisi menang
+win :- write('Kamu menang ... :) '),nl,!.
+lose :- write('Kamu kalah.. :P'),nl,!.
 
-% Pemilihan tokemon 
-choose(_) :- losing, lose, !.
+
+/* Pemilihan tokemon */
+choose(_) :- loseCondition, lose, !.
 choose(X) :- 
         inbattle(1),
         tokemon(X,_,_,_,_,_), asserta(chosentokemon(X,1)),
@@ -28,7 +48,7 @@ choose(_) :-
         write('Kamu tidak sedang bertarung'),nl,!.
 
 attack :- 
-        losing, lose, !.
+        loseCondition, lose, !.
 attack :-
         inbattle(2),
         write('Tokemonnya sudah pingsan!'), nl,!.
@@ -57,7 +77,7 @@ attack :-
         retract(enemy(_,_,_,_,_)), asserta(enemy(A,Z,B,C,TypeL)), cekhealthL, !.
 
 specialAttack :- 
-        losing, lose, !.
+        loseCondition, lose, !.
 specialAttack :-
         inbattle(2),
         write('Tokemonnya sudah pingsan!'), nl,!.
@@ -141,7 +161,7 @@ cekhealthL :-
         attacked, !.        
 
 capture :-
-        \+ losing,
+        \+ loseCondition,
         inbattle(2),
         enemy(X,_,_,_,_), tokemon(X,B,C,D,E,F), asserta(avChoose), 
         addtokemon(X,B,C,D,E,F), retract(enemy(X,_,_,_,_)), 
@@ -149,7 +169,7 @@ capture :-
         nl, map, !.
 
 lanjut :- 
-        \+ losing,
+        \+ loseCondition,
         inbattle(2),
         enemy(X,_,_,_,_), 
         write(X), write(' meninggalkan kamu'), nl,
@@ -181,29 +201,29 @@ cektokemon :-
         write(']'),nl,
         asserta(inbattle(1)), !. 
 cektokemon :- 
-        cektokemon(Banyak), Banyak =:= 0, asserta(losing), lose,!.
+        cektokemon(Banyak), Banyak =:= 0, asserta(loseCondition), lose,!.
 
 /* Tukar tokemon dalam list */
 change(_) :- 
-        losing, lose, !.
+        loseCondition, lose, !.
 change(_) :- 
-        \+ losing,
+        \+ loseCondition,
         \+ inbattle(1), 
         write('Kamu tidak sedang bertarung!'),nl,!.
 change(A) :- 
-        \+ losing, 
+        \+ loseCondition, 
         inbattle(1), 
         \+(tokemon(A,_,_,_,_,_)),
         write('Kamu tidak memiliki Tokemon tersebut!'), nl, !.
 change(A) :- 
-        \+ losing, 
+        \+ loseCondition, 
         inbattle(1), 
         tokemon(A,_,_,_,_,_),
         chosentokemon(X,_), 
         A =:= X, 
         write('Kamu sedang memakai Tokemon '), write(A), nl, !.
 change(A) :- 
-        \+ losing, 
+        \+ loseCondition, 
         inbattle(1), 
         tokemon(A,_,_,_,_,_),
         chosentokemon(X,_), 
