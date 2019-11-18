@@ -149,7 +149,10 @@ retractall(legend_count(_X)).
 initNbToke(1).
 
 randomFirstTokemon(RandomToke) :-
-random(1, 12, Nr), id(Toke, Nr),
+random(1, 12, Nr), 
+Nr\==1,
+Nr\==9,
+id(Toke, Nr),
 RandomToke is Toke.
 
 initTokeList([]).
@@ -371,7 +374,7 @@ load_all(_) :-
 nl, write('Wrong input !'), nl, fail.
 
 /* NYEBAR POKEMON */
-spreadTokemon :-
+randomTokemon :-
     repeat,
     random(1, 12, A), id(Z, A),
     random(0, 19, X), random(0, 19, Y),
@@ -380,13 +383,13 @@ spreadTokemon :-
     X\==Xb,
     Y\==Ya,
     Y\==Yb,
-    asserta(tokemon_pos(X,Y,Z)),!.
+    asserta(tokemon_pos(X,Y,Z)).
 
-init_weapon(0) :-!.
-init_weapon(N) :-
-    randomWeapon,
-    M is N-1,
-    init_weapon(M).
+spread_tokemon(0) :-!.
+spread_tokemon(B) :-
+    randomTokemon,
+    C is B-1,
+    init_weapon(C).
 
  init_game:- asserta(player_location(1,1)),
 			asserta(gym_pos1(5,4)),
