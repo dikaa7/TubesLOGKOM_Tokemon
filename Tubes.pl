@@ -360,7 +360,7 @@ delete_one(Term, [Head|Tail], [Head|Result]) :-
 
  :- dynamic(playerStatus/2).
 
-/* SAVE */
+/* MENYIMPAN FILE KONFIGURASI */
 
 save :-
 			nl, write('Masukkan nama file untuk menyimpan game-mu!'), nl,
@@ -418,28 +418,35 @@ saveTokePosition(Ekstern) :-
 				nl(Ekstern),
 				fail.
 
-/* LOAD STATE */
+/* MEMUAT FILE KONFIGURASI */
 
-loadgame :-
-				nl, write('Input file load!') , nl,
-				write('>') , read(File),
+load :-
+				nl, 
+				write('Masukkan nama file yang akan dimuat!') , nl,
+				write('% '), 
+				read(File),
 				atom_concat(File,'.txt',Filetxt),
-				load_all_fact(Filetxt).
+				loadcfg(Filetxt).
 
-load_all_fact(Filetxt) :-
-				retractall(enemy(_,_,_,_)),
-				retractall(player(_,_,_,_,_,_,_)),
-				retractall(location(_,_,_)),
-				open(Filetxt, read, Stream),
+loadcfg(Filetxt) :-
+				retractall(player_location(_,_)),
+				retractall(legend_count(_)),
+				retractall(tokemon(_,_,_,_,_,_)),
+				retractall(playerStatus(_,_)),
+				retractall(position(_,_,_)),
+				open(Filetxt, read, Ekstern),
 				repeat,
-						read(Stream, In),
+						read(Ekstern, In),
 						asserta(In),
-				at_end_of_stream(Stream),
-				close(Stream),
-				nl, write('Your File is loaded!'), nl, !.
+				at_end_of_stream(Ekstern),
+				close(Ekstern),
+				nl, 
+				write('File berhasil dimuat. Selamat bermain Tokemon kembali!'), nl, !.
 
-load_all_fact(_):-
-			  nl, write('Your input is wrong!'), nl, fail.
+loadcfg(_):-
+			  nl, 
+			  write('File salah! Silakan coba ``load.`` kembali!'), nl, 
+			  fail.
 
 /* NYEBAR POKEMON */
 randomTokemon :-
