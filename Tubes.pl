@@ -336,6 +336,33 @@ save_all(Stream),
 close(Stream),
 write('Saved !'), nl.
 
+save_all(S) :- save_player_tokemon, save(S), !.
+
+save(S) :-
+playerStatus(A),
+player_location(X,Y),
+player_tokemon(B),
+tokemon_health(C,D),
+legend_count(E),
+tell(S),
+write(A), write('.'), nl,
+write(X), write('.'), nl,
+write(Y), write('.'), nl,
+write(B), write('.'), nl,
+forall((player_tokemon(BB), BB\ == B, BB \== none), (write(BB), write('.'), nl)),
+write('done.'), nl,
+write(C), write('.'), nl,
+write(D), write('.'), nl,
+forall((tokemon_health(CC,DD), CC\ == C, CC \== none), (write(BB), write('.'), nl), (write(DD), write('.'), nl)),
+write('done.'), nl,
+write(E), write('.'), told, !.
+
+save_player_tokemon :-
+\+ player_tokemon(_,_),
+asserta(player_tokemon(none,0).
+
+save_player_tokemon.
+/*
 save_all(Stream) :-
 save_playerStatus(Stream).
 
@@ -347,10 +374,10 @@ save_player_tokemon(Stream).
 
 save_all(Stream) :-
 save_tokemon_health(Stream).
-
+*/
 /*save_all(Stream) :-
 save_legend_count(Stream).*/
-
+/*
 save_playerStatus(Stream) :-
 playerStatus(TokemonList,NbTokemon),
 write(Stream,TokemonList),
@@ -388,7 +415,7 @@ write(Stream,X),
 write(Stream, '.'),
 nl(Stream),
 fail.
-
+*/
 /* LOAD */
 
 load_game :-
