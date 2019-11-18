@@ -360,6 +360,8 @@ delete_one(Term, [Head|Tail], [Head|Result]) :-
 
  :- dynamic(playerStatus/2).
 
+drop(X) :- id(Id,X),
+        eraseTokemon(Id),!.
 /* MENYIMPAN FILE KONFIGURASI */
 
 save :-
