@@ -348,40 +348,43 @@ save_player_tokemon(Stream).
 save_all(Stream) :-
 save_tokemon_health(Stream).
 
-save_all(Stream) :-
-save_legend_count(Stream).
+/*save_all(Stream) :-
+save_legend_count(Stream).*/
 
 save_playerStatus(Stream) :-
 playerStatus(TokemonList,NbTokemon),
-write(Stream, playerStatus(TokemonList,NbTokemon)),
+write(Stream,TokemonList),
+write(Stream,NbTokemon),
 write(Stream, '.'),
 nl(Stream),
 fail.
 
 save_player_location(Stream) :-
 player_location(X,Y),
-write(Stream,player_location(X,Y)),
+write(Stream,X),
+write(Stream,Y),
 write(Stream, '.'),
 nl(Stream),
 fail.
 
 save_player_tokemon(Stream) :-
 player_tokemon(X),
-write(Stream, player_tokemon(X)),
+write(Stream,X),
 write(Stream,'.'),
 nl(Stream),
 fail.
 
 save_tokemon_health(Stream) :-
 tokemon_health(X,Y),
-write(Stream, tokemon_health(X,Y)),
+write(Stream,X),
+write(Stream,Y),
 write(Stream, '.'),
 nl(Stream),
 fail.
 
 save_legend_count(Stream) :-
 legend_count(X),
-write(Stream, legend_count(X)),
+write(Stream,X),
 write(Stream, '.'),
 nl(Stream),
 fail.
