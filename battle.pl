@@ -4,6 +4,13 @@
 :- dynamic(runorfight/0).
 :- dynamic(losing/0).
 
+/* Strong Type Tokemon */
+strong(fire,grass).
+strong(grass,water).
+strong(water,fire).
+strong(rock,fire).
+strong(water,rock).
+
 % Pemilihan tokemon 
 choose(_) :- losing, lose, !.
 choose(X) :- 
