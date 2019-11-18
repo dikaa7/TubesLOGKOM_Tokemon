@@ -63,10 +63,6 @@ type(rain,water).
 type(octomon,water).
 type(dragostorm,water).
 
-
-
-
-
 /* TOKEMON NORMAL ATTACK FACTS */
 normalAttack(enax, 12).
 normalAttack(alon, 15).
@@ -110,6 +106,7 @@ rarity(rain,normal).
 rarity(octomon,normal).
 rarity(dragostorm,normal).
 
+/* TOKEMON ID */
 id(dragonite,1).
 id(firara,2).
 id(burster,3).
@@ -123,9 +120,8 @@ id(rain,10).
 id(octomon,11).
 id(dragostorm,12).
 
+/* MAP SIZE FACT */
 map_size(0,21).
-
-test:- rarity(X,Y), X==dragonite, write(Y).
 
 /* HELP DESK */
 help :-	write('Available commands:'),nl,
@@ -143,7 +139,7 @@ write('- X = Pagar'),nl,
 write('- P = Player'),nl,
 write('- G = Gym'),nl.
 			
-/* Variabel Dinamik */
+/* DYNAMIC VARIABLES */
 :- dynamic(player_location/2).
 :- dynamic(player_tokemon/1).
 :- dynamic(banyak/1).
@@ -152,7 +148,7 @@ write('- G = Gym'),nl.
 :- dynamic(legend_count/1).
 :- dynamic(playerStatus/2).
 
-/* Fact Dinamik */
+/* DYNAMIC FACTS */
 dynamic_facts :-
 retractall(player_location(_X,_Y)),
 retractall(player_tokemon(_X)),
@@ -184,6 +180,7 @@ position(9,20,1).
 position(10,14,3).
 position(11,3,2).
 position(12,4,1).
+
 /* INITIATE ATTRIBUTE OF CHARACTER */
 initNbToke(1).
 
@@ -206,13 +203,8 @@ initChar:-
 init_game:- asserta(player_location(1,1)),
 			asserta(gym_pos1(5,4)),
 			asserta(gym_pos2(14,12)).
-			/*
-			random(1,12,X),
-			id(Y,X),
-			asserta(tokemon_status(Y,health(Y),normalAttack(Y),specialAttack(Y))),
-			initChar.
-			*/
 		
+/* MAP. COMMAND */		
 map:- printmap(0,0),!.
 
 printmap(X,Y):- player_location(Xa,Ya),
@@ -285,6 +277,7 @@ w :-
 (player_location(X,Y), map_size(Min,Max), Z is X - 1, Z =< Min, write(' Invalid move'));
 (player_location(X,Y), map_size(Min,Max), Z is X - 1, Z > Min, retractall(player_location(X,Y)), assertz(player_location(Z,Y)),!),cek(Z,Y,1).
 
+/* MENGECEK POSISI KARAKTER DALAM MAP */
 cek(X,Y,Z):- gym_pos1(Xa,Ya),
 		   X == Xa, Y == Ya,
 		   write('Anda sedang berada di gym, anda dapat menggunakan command heal untuk menyembuhkan tokemon anda'),nl,!.
@@ -300,7 +293,6 @@ cek(X,Y,Z):- Z<13,
 			Za is Z+1,
 			cek(X,Y,Za),!.
 
-/* ADDED ON 17/11/2019 */
 /* CEK DI GYM */
 dalamGym :-
 (player_location(X,Y), gym_pos1(Xa, Ya), X==Xa, X==Ya,!);
@@ -340,6 +332,8 @@ printstatus(TokemonL,NbTokemon):- NbTokemon > 0,
 								 printstatus(T,NbToke).
 			
 /* ADD CAPTURED TOKEMON TO INVENTORY */
+/* inspirasi: https://github.com/pandyakaa/Prolog-BattleRoyale */
+
 addTokemon(CapturedT) :-
 retract(playerStatus(TokemonList, NbTokemon)),
 append([CapturedT],TokemonList, NewTokeList),
@@ -347,6 +341,8 @@ NewNbToke is NbTokemon + 1,
 asserta(playerStatus(NewTokeList, NewNbToke)).
 
 /* ERASE LOST TOKEMON FROM INVENTORY */
+/* inspirasi: https://github.com/pandyakaa/Prolog-BattleRoyale */
+
 eraseTokemon(DeadT) :-
 retract(playerStatus(TokemonList, NbTokemon)),
 delete_one(CapturedT, TokemonList, NewTokeList),
@@ -362,8 +358,9 @@ delete_one(Term, [Head|Tail], [Head|Result]) :-
 
 drop(X) :- id(Id,X),
         eraseTokemon(Id),!.
-/* MENYIMPAN FILE KONFIGURASI */
 
+/* MENYIMPAN FILE KONFIGURASI */
+/* inspirasi: https://github.com/pandyakaa/Prolog-BattleRoyale */
 save :-
 			nl, write('Masukkan nama file untuk menyimpan game-mu!'), nl,
 			write('% '), 
@@ -421,7 +418,7 @@ saveTokePosition(Ekstern) :-
 				fail.
 
 /* MEMUAT FILE KONFIGURASI */
-
+/* inspirasi: https://github.com/pandyakaa/Prolog-BattleRoyale */
 load :-
 				nl, 
 				write('Masukkan nama file yang akan dimuat!') , nl,
@@ -450,28 +447,7 @@ loadcfg(_):-
 			  write('File salah! Silakan coba ``load.`` kembali!'), nl, 
 			  fail.
 
-/* NYEBAR POKEMON */
-randomTokemon :-
-    repeat,
-    random(1, 12, A), id(Z, A),
-    random(0, 19, X), random(0, 19, Y),
-    gym_pos1(Xa,Ya), gym_pos2(Xb, Yb),
-    X\==Xa,
-    X\==Xb,
-    Y\==Ya,
-    Y\==Yb,
-    asserta(tokemon_pos(X,Y,Z)).
 
-spread_tokemon(0) :-!.
-spread_tokemon(B) :-
-    randomTokemon,
-    C is B-1,
-    init_weapon(C).
-
- init_game:- asserta(player_location(1,1)),
-			asserta(gym_pos1(5,4)),
-			asserta(gym_pos2(14,12)).
-/* File untuk saat tokemon bertarung */
 /* File untuk saat tokemon bertarung */
 
 :- dynamic(enemy/5).
@@ -531,7 +507,7 @@ fight :- asserta(inbattle(1)),player_location(Xa,Ya),position(Z,Xa,Ya),Z == 1,re
 fight :- asserta(inbattle(1)),player_location(Xa,Ya),position(Z,Xa,Ya),Z == 9,retract(legend_count(Ta)),Tb is Ta+1,asserta(legend_count(Tb)),id(X,Z),tokemon(X,Ta,Tb,Tc,Td,Te),asserta(enemy(X,Ta,Tb,Tc,Td)).
 fight :- asserta(inbattle(1)),player_location(Xa,Ya),position(Z,Xa,Ya),id(X,Z),tokemon(X,Ta,Tb,Tc,Td,Te),asserta(enemy(X,Ta,Tb,Tc,Td)).
 
-/* Pemilihan tokemon */
+/* PEMILIHAN TOKEMON */
 choose1(Id,TokemonList,NbTokemon) :- [H|T] = TokemonList,
                                 H == Id, id(X,Id),choose2(X),!.
 choose1(Id,TokemonList,NbTokemon) :-  NbTokemon>0,
@@ -693,7 +669,7 @@ lanjut :-
         retract(inbattle(2)), 
         nl, map, !.
 
-/* Mengecek Tokemon dalam inventory */
+/* CHECKING TOKEMON IN INVENTORY */
 
 cektokemon :- playerStatus(TokeList,NbToke),
                 banyak(Ta),
@@ -707,7 +683,7 @@ cektokemon :- playerStatus(TokeList,NbToke),
                 write('Maaf anda tidak dapat bertarung lagi, dan anda akan dikeluarkan dari dunia ini hahahaha'),halt,!.
 cektokemon1(TokeList,NbToke) :- write('Kamu masih memiliki sisa tokemon'),nl,write('Cek status , dan panggil choose untuk tokemon berikutnya').
 
-/* Tukar tokemon dalam list */
+/* SWAPPING TOKEMON IN INVENTORY */
 change(_) :- 
         loseCondition, lose, !.
 change(_) :- 
