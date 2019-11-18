@@ -283,6 +283,8 @@ delete_one(Term, [Term|Tail], Tail) :- !.
 delete_one(Term, [Head|Tail], [Head|Result]) :-
     delete_one(Term, Tail, Result).
 
+ :- dynamic(playerStatus/3).
+
 /* SAVE */
 
 save_game :-
