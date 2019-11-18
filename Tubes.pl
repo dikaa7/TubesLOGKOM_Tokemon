@@ -136,6 +136,7 @@ write('- G = Gym'),nl.
 :- dynamic(player_tokemon/1).
 :- dynamic(tokemon_health/2).
 :- dynamic(legend_count/2).
+:- dynamic(playerStatus/3).
 
 /* Fact Dinamik */
 dynamic_facts :-
@@ -143,8 +144,6 @@ retractall(player_location(_X,_Y)),
 retractall(player_tokemon(_X)),
 retractall(tokemon_health(_X,_Y)),
 retractall(legend_count(_X)).
-
-:- dynamic(playerStatus/3).
 
 /* INITIATE ATTRIBUTE OF CHARACTER */
 initNbToke(1).
