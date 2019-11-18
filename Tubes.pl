@@ -8,25 +8,26 @@ Nama / NIM
 */
 
 /* START MESSAGE */
-start:- write('   ██████╗  ██████╗ ████████╗████████╗ █████╗     '),nl,                                               
-		write(' ██╔════╝ ██╔═══██╗╚══██╔══╝╚══██╔══╝██╔══██╗   '),nl,                                                
-		write(' ██║  ███╗██║   ██║   ██║      ██║   ███████║    '),nl,                                               
-		write(' ██║   ██║██║   ██║   ██║      ██║   ██╔══██║       '),nl,                                            
-		write(' ╚██████╔╝╚██████╔╝   ██║      ██║   ██║  ██║          '),nl,                                         
-		write('  ╚═════╝  ╚═════╝    ╚═╝      ╚═╝   ╚═╝  ╚═╝             '),nl,                                      
+start:- /*write('   ██████╗  ██████╗ ████████╗████████╗ █████╗     '),nl,                                               
+		  write(' ██╔════╝ ██╔═══██╗╚══██╔══╝╚══██╔══╝██╔══██╗   '),nl,                                                
+		  write(' ██║  ███╗██║   ██║   ██║      ██║   ███████║    '),nl,                                               
+		  write(' ██║   ██║██║   ██║   ██║      ██║   ██╔══██║       '),nl,                                            
+		  write(' ╚██████╔╝╚██████╔╝   ██║      ██║   ██║  ██║          '),nl,                                         
+		  write('  ╚═════╝  ╚═════╝    ╚═╝      ╚═╝   ╚═╝  ╚═╝             '),nl,                                      
 																										   
 		write(' ██████╗ █████╗ ████████╗ ██████╗██╗  ██╗    ███████╗███╗   ███╗     █████╗ ██╗     ██╗     ██╗'),nl,
 		write('██╔════╝██╔══██╗╚══██╔══╝██╔════╝██║  ██║    ██╔════╝████╗ ████║    ██╔══██╗██║     ██║     ██║'),nl,
 		write('██║     ███████║   ██║   ██║     ███████║    █████╗  ██╔████╔██║    ███████║██║     ██║     ██║'),nl,
 		write('██║     ██╔══██║   ██║   ██║     ██╔══██║    ██╔══╝  ██║╚██╔╝██║    ██╔══██║██║     ██║     ╚═╝'),nl,
 		write('╚██████╗██║  ██║   ██║   ╚██████╗██║  ██║    ███████╗██║ ╚═╝ ██║    ██║  ██║███████╗███████╗██╗'),nl,
-		write(' ╚═════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝'),nl,
-		write("Gotta catch 'em all!"),
+		write(' ╚═════╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═╝  ╚═╝    ╚══════╝╚═╝     ╚═╝    ╚═╝  ╚═╝╚══════╝╚══════╝╚═╝'),nl,*/
+		nl,
+		write('Gotta catch `em all!'),nl,nl,
 
 		write('Hi there! Welcome to the world of Tokemon! My name is Tome!                              '),nl,
 		write('There are a lot of tokemon all around you! Catch them to get stronger! '),nl,
 		write('But your final mission is to defeat or capture all those legendary tokemon, if you fail, '),nl,
-		write('you will be out from this world.            '),
+		write('you will be out from this world.            '),nl,nl,
 		help,
 		init_game,
 		initChar.
