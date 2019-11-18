@@ -1,7 +1,6 @@
 /* File untuk saat tokemon bertarung */
 :- dynamic(lawan/5).
 :- dynamic(chosentokemon/2).
-:- dynamic(runorfight/0).
 :- dynamic(losing/0).
 
 /* Strong Type Tokemon */
